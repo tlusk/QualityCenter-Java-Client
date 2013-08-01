@@ -1,6 +1,7 @@
 package darkcube.qc;
 
 import darkcube.qc.model.Defect;
+import darkcube.qc.model.DefectField;
 import darkcube.qc.model.Domain;
 import darkcube.qc.model.Project;
 import org.glassfish.jersey.client.filter.HttpBasicAuthFilter;
@@ -48,13 +49,14 @@ public class Test {
         List<Domain> domains = getDomains();
         List<Project> projects = getProjects(domains.get(0).getName());
         Defect defect = getDefect(domains.get(0).getName(),projects.get(0).getName(),1);
-        System.out.println(defect.getFields().get(0).getName());
+        System.out.println(defect.getField(DefectField.NAME));
     }
 
 
 
     public static List<Domain> getDomains() {
-        return getRestData(new GenericType<List<Domain>>(){}, "rest/domains");
+        return getRestData(new GenericType<List<Domain>>() {
+        }, "rest/domains");
     }
 
     public static List<Project> getProjects(String domain) {

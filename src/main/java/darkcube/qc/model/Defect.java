@@ -1,33 +1,15 @@
 package darkcube.qc.model;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.List;
 
 @XmlRootElement(name = "Entity")
-public class Defect {
+public class Defect extends Entity {
 
-    private String type;
-    private List<Field> fields;
-
-    @XmlAttribute(name = "Type")
-    public String getType() {
-        return type;
+    public String getField(DefectField field) {
+        return fields.get(field.getName());
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    @XmlElementWrapper(name = "Fields")
-    @XmlElement(name = "Field")
-    public List<Field> getFields() {
-        return fields;
-    }
-
-    public void setFields(List<Field> fields) {
-        this.fields = fields;
+    public void setField(DefectField field, String value) {
+        fields.put(field.getName(), value);
     }
 }
