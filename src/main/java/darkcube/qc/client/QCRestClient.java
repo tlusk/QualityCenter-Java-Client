@@ -1,22 +1,33 @@
 package darkcube.qc.client;
 
-import com.sun.org.apache.bcel.internal.generic.GETFIELD;
+import darkcube.qc.model.Defect;
+import darkcube.qc.model.Domain;
+import darkcube.qc.model.Project;
 
-import java.net.HttpURLConnection;
+import javax.ws.rs.core.GenericType;
+import java.util.List;
 
 public class QCRestClient {
 
-    private String serverAddress;
-    private String username;
-    private String password;
+    private RestCallHandler callHandler;
 
-    public QCRestClient(String serverAddress, String username, String password) {
-        this.serverAddress = serverAddress;
-        this.username = username;
-        this.password = password;
+    public QCRestClient(String hostname, String username, String password) {
+        callHandler = new RestCallHandler(hostname, username, password);
     }
 
-    public boolean login() {
-        return false;
+    public void login() {
+        callHandler.login();
+    }
+
+    public List<Domain> getDomains() {
+        return callHandler.getRestData(new GenericType<List<Domain>>() {}, "rest/domains");
+    }
+
+    public List<Project> getProjects(String domain) {
+        return callHandler.getRestData(new GenericType<List<Project>>(){}, "rest/domains/" + domain + "/projects");
+    }
+
+    public Defect getDefect(String domain, String project, int defectId) {
+        return callHandler.getRestData(Defect.class, "rest/domains/" + domain + "/projects/" + project + "/defects/" + defectId);
     }
 }
