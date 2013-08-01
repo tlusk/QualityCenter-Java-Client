@@ -51,6 +51,30 @@ public class Test {
         System.out.println(defect.getFields().get(0).getName());
     }
 
+
+
+    public static List<Domain> getDomains() {
+        return getRestData(new GenericType<List<Domain>>(){}, "rest/domains");
+    }
+
+    public static List<Project> getProjects(String domain) {
+        return getRestData(new GenericType<List<Project>>(){}, "rest/domains/" + domain + "/projects");
+    }
+
+    public static Defect getDefect(String domain, String project, int defectId) {
+        return getRestData(Defect.class, "rest/domains/" + domain + "/projects/" + project + "/defects/" + defectId);
+    }
+
+    public static <T> T getRestData(Class<T> retType, String restUrl) {
+        Invocation.Builder invocationBuilder = buildRestRequest(restUrl);
+        return invocationBuilder.get().readEntity(retType);
+    }
+
+    public static <T> T getRestData(GenericType<T> retType, String restUrl) {
+        Invocation.Builder invocationBuilder = buildRestRequest(restUrl);
+        return invocationBuilder.get().readEntity(retType);
+    }
+
     public static String login() {
         Client client = ClientBuilder.newClient();
         client.register(new HttpBasicAuthFilter(username, password));
@@ -60,33 +84,13 @@ public class Test {
         return response.getHeaderString("Set-Cookie").split("=")[1].split(" ")[0];
     }
 
-    public static List<Domain> getDomains() {
+    private static Invocation.Builder buildRestRequest(String restUrl) {
         Client client = ClientBuilder.newClient();
-        WebTarget webTarget = client.target("http://" + hostname + "/qcbin/rest/domains");
+        WebTarget webTarget = client.target("http://" + hostname + "/qcbin/" + restUrl);
 
         Invocation.Builder invocationBuilder = webTarget.request(MediaType.WILDCARD_TYPE);
-        invocationBuilder.cookie("LWSSO_COOKIE_KEY", sessionKey);
-
-        return invocationBuilder.get().readEntity(new GenericType<List<Domain>>(){});
+        return invocationBuilder.cookie("LWSSO_COOKIE_KEY", sessionKey);
     }
 
-    public static List<Project> getProjects(String domain) {
-        Client client = ClientBuilder.newClient();
-        WebTarget webTarget = client.target("http://" + hostname + "/qcbin/rest/domains/" + domain + "/projects");
 
-        Invocation.Builder invocationBuilder = webTarget.request(MediaType.WILDCARD_TYPE);
-        invocationBuilder.cookie("LWSSO_COOKIE_KEY", sessionKey);
-
-        return invocationBuilder.get().readEntity(new GenericType<List<Project>>(){});
-    }
-
-    public static Defect getDefect(String domain, String project, int defectId) {
-        Client client = ClientBuilder.newClient();
-        WebTarget webTarget = client.target("http://" + hostname + "/qcbin/rest/domains/" + domain + "/projects/" + project + "/defects/" + defectId);
-
-        Invocation.Builder invocationBuilder = webTarget.request(MediaType.WILDCARD_TYPE);
-        invocationBuilder.cookie("LWSSO_COOKIE_KEY", sessionKey);
-
-        return invocationBuilder.get().readEntity(Defect.class);
-    }
 }
