@@ -1,2 +1,4 @@
 .idea/workspace.xml
+server.properties
 out
+*.class
