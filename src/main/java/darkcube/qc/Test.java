@@ -1,6 +1,8 @@
 package darkcube.qc;
 
+import darkcube.qc.model.Defect;
 import darkcube.qc.model.Domain;
+import darkcube.qc.model.Project;
 import org.glassfish.jersey.client.filter.HttpBasicAuthFilter;
 
 import javax.ws.rs.client.Client;
@@ -21,6 +23,8 @@ public class Test {
     private static String username;
     private static String password;
 
+    private static String sessionKey;
+
     public static void main(String[] args) {
 
         try {
@@ -40,18 +44,11 @@ public class Test {
             System.exit(-1);
         }
 
-        String sessionKey = login();
-
-        Client client = ClientBuilder.newClient();
-        WebTarget webTarget = client.target("http://" + hostname + "/qcbin/rest/domains");
-
-        Invocation.Builder invocationBuilder = webTarget.request(MediaType.WILDCARD_TYPE);
-        invocationBuilder.cookie("LWSSO_COOKIE_KEY", sessionKey);
-
-        List<Domain> domains = invocationBuilder.get().readEntity(new GenericType<List<Domain>>() {
-        });
-
-        System.out.println(domains.get(0).getName());
+        sessionKey = login();
+        List<Domain> domains = getDomains();
+        List<Project> projects = getProjects(domains.get(0).getName());
+        Defect defect = getDefect(domains.get(0).getName(),projects.get(0).getName(),1);
+        System.out.println(defect.getFields().get(0).getName());
     }
 
     public static String login() {
@@ -61,5 +58,35 @@ public class Test {
 
         Response response = webTarget.request(MediaType.TEXT_PLAIN_TYPE).get();
         return response.getHeaderString("Set-Cookie").split("=")[1].split(" ")[0];
+    }
+
+    public static List<Domain> getDomains() {
+        Client client = ClientBuilder.newClient();
+        WebTarget webTarget = client.target("http://" + hostname + "/qcbin/rest/domains");
+
+        Invocation.Builder invocationBuilder = webTarget.request(MediaType.WILDCARD_TYPE);
+        invocationBuilder.cookie("LWSSO_COOKIE_KEY", sessionKey);
+
+        return invocationBuilder.get().readEntity(new GenericType<List<Domain>>(){});
+    }
+
+    public static List<Project> getProjects(String domain) {
+        Client client = ClientBuilder.newClient();
+        WebTarget webTarget = client.target("http://" + hostname + "/qcbin/rest/domains/" + domain + "/projects");
+
+        Invocation.Builder invocationBuilder = webTarget.request(MediaType.WILDCARD_TYPE);
+        invocationBuilder.cookie("LWSSO_COOKIE_KEY", sessionKey);
+
+        return invocationBuilder.get().readEntity(new GenericType<List<Project>>(){});
+    }
+
+    public static Defect getDefect(String domain, String project, int defectId) {
+        Client client = ClientBuilder.newClient();
+        WebTarget webTarget = client.target("http://" + hostname + "/qcbin/rest/domains/" + domain + "/projects/" + project + "/defects/" + defectId);
+
+        Invocation.Builder invocationBuilder = webTarget.request(MediaType.WILDCARD_TYPE);
+        invocationBuilder.cookie("LWSSO_COOKIE_KEY", sessionKey);
+
+        return invocationBuilder.get().readEntity(Defect.class);
     }
 }
