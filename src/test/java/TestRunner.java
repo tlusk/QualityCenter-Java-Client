@@ -11,7 +11,7 @@ import java.util.Properties;
 
 public class TestRunner {
 
-    private static String hostname;
+    private static String host;
     private static String username;
     private static String password;
 
@@ -24,7 +24,7 @@ public class TestRunner {
             prop.load(new FileInputStream("server.properties"));
 
             //get the property value and print it out
-            hostname = prop.getProperty("hostname");
+            host = prop.getProperty("host");
             username = prop.getProperty("username");
             password = prop.getProperty("password");
 
@@ -34,7 +34,7 @@ public class TestRunner {
             System.exit(-1);
         }
 
-        QCRestClient client = new QCRestClient(hostname, username, password);
+        QCRestClient client = new QCRestClient(host, username, password);
         client.login();
 
         List<Domain> domains = client.getDomains();

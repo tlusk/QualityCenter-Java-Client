@@ -12,13 +12,13 @@ import javax.ws.rs.core.Response;
 
 public class RestCallHandler {
 
-    private final String hostname;
+    private final String host;
     private final String username;
     private final String password;
     private String sessionKey;
 
-    public RestCallHandler(String hostname, String username, String password) {
-        this.hostname = hostname;
+    public RestCallHandler(String host, String username, String password) {
+        this.host = host;
         this.username = username;
         this.password = password;
     }
@@ -36,7 +36,7 @@ public class RestCallHandler {
     public void login() {
         Client client = ClientBuilder.newClient();
         client.register(new HttpBasicAuthFilter(username, password));
-        WebTarget webTarget = client.target("http://" + hostname + "/qcbin/authentication-point/authenticate");
+        WebTarget webTarget = client.target(host + "/qcbin/authentication-point/authenticate");
 
         Response response = webTarget.request(MediaType.TEXT_PLAIN_TYPE).get();
         sessionKey = response.getHeaderString("Set-Cookie").split("=")[1].split(" ")[0];
@@ -44,7 +44,7 @@ public class RestCallHandler {
 
     private Invocation.Builder buildRestRequest(String restUrl) {
         Client client = ClientBuilder.newClient();
-        WebTarget webTarget = client.target("http://" + hostname + "/qcbin/" + restUrl);
+        WebTarget webTarget = client.target(host + "/qcbin/" + restUrl);
 
         Invocation.Builder invocationBuilder = webTarget.request(MediaType.WILDCARD_TYPE);
         return invocationBuilder.cookie("LWSSO_COOKIE_KEY", sessionKey);

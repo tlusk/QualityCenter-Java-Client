@@ -11,8 +11,8 @@ public class QCRestClient {
 
     private RestCallHandler callHandler;
 
-    public QCRestClient(String hostname, String username, String password) {
-        callHandler = new RestCallHandler(hostname, username, password);
+    public QCRestClient(String host, String username, String password) {
+        callHandler = new RestCallHandler(host, username, password);
     }
 
     public void login() {
