@@ -2,3 +2,4 @@
 server.properties
 out
 *.class
+/target
