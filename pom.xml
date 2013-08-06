@@ -24,5 +24,28 @@
     <groupId>darkcube.qc</groupId>
     <artifactId>qualitycenter-java-client</artifactId>
     <version>1.0-SNAPSHOT</version>
+
+    <distributionManagement>
+        <repository>
+            <id>repo</id>
+            <url>https://github.com/darkcube/darkcube-mvn-repo/raw/master</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshot-repo</id>
+            <url>https://github.com/darkcube/darkcube-mvn-repo/raw/master</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <profiles>
+        <profile>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <id>local-deploy</id>
+            <properties>
+                <altDeploymentRepository>snapshot-repo::default::file:${basedir}/../darkcube-mvn-repo</altDeploymentRepository>
+            </properties>
+        </profile>
+    </profiles>
     
 </project>
