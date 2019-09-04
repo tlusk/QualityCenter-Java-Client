@@ -1,4 +1,4 @@
-package darkcube.qc.model;
+package be.mdi.testing.qc.model.fields;
 
 public enum DefectField {
     ACTUAL_FIX_TIME("actual-fix-time"),
@@ -37,7 +37,32 @@ public enum DefectField {
     TARGET_RCYC("target-rcyc"),
     TARGET_REL("target-rel"),
     TEST_REFERENCE("test-reference"),
-    TO_MAIL("to-mail");
+    TO_MAIL("to-mail"),
+    USER_01("user-01"),
+    USER_02("user-02"),
+    USER_03("user-03"),
+    USER_04("user-04"),
+    USER_05("user-05"),
+    USER_06("user-06"),
+    USER_07("user-07"),
+    USER_08("user-08"),
+    USER_09("user-09"),
+    USER_10("user-10"),
+    USER_11("user-11"),
+    USER_12("user-12"),
+    USER_13("user-13"),
+    USER_14("user-14"),
+    USER_15("user-15"),
+    USER_16("user-16"),
+    USER_17("user-17"),
+    USER_18("user-18"),
+    USER_19("user-19"),
+    USER_20("user-20"),
+    USER_21("user-21"),
+    USER_22("user-22"),
+    USER_23("user-23"),
+    USER_24("user-24");
+
 
     private String name;
 

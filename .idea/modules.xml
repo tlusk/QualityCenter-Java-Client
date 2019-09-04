@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/QualityCenter Java Client.iml" filepath="$PROJECT_DIR$/QualityCenter Java Client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qualitycenter-java-client.iml" filepath="$PROJECT_DIR$/qualitycenter-java-client.iml" />
     </modules>
   </component>
 </project>
-

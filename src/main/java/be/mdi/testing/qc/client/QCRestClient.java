@@ -1,8 +1,8 @@
-package darkcube.qc.client;
+package be.mdi.testing.qc.client;
 
-import darkcube.qc.model.Defect;
-import darkcube.qc.model.Domain;
-import darkcube.qc.model.Project;
+import be.mdi.testing.qc.model.entities.Defect;
+import be.mdi.testing.qc.model.Domain;
+import be.mdi.testing.qc.model.Project;
 
 import javax.ws.rs.core.GenericType;
 import java.util.List;

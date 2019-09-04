@@ -1,9 +1,15 @@
-package darkcube.qc.model;
+package be.mdi.testing.qc.model.entities;
+
+import be.mdi.testing.qc.model.fields.DefectField;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "Entity")
 public class Defect extends Entity {
+
+    public Defect() {
+        setType("defect");
+    }
 
     public String getField(DefectField field) {
         return fields.get(field.getName());

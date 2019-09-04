@@ -1,4 +1,4 @@
-package darkcube.qc.client;
+package be.mdi.testing.qc.client;
 
 import org.glassfish.jersey.client.filter.HttpBasicAuthFilter;
 
@@ -47,6 +47,6 @@ public class RestCallHandler {
         WebTarget webTarget = client.target(host + "/qcbin/" + restUrl);
 
         Invocation.Builder invocationBuilder = webTarget.request(MediaType.WILDCARD_TYPE);
-        return invocationBuilder.cookie("LWSSO_COOKIE_KEY", sessionKey);
+        return invocationBuilder.header("Cookie", "LWSSO_COOKIE_KEY=" + sessionKey);
     }
 }

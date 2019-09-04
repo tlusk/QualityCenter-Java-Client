@@ -1,4 +1,4 @@
-package darkcube.qc.model;
+package be.mdi.testing.qc.model.entities;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
@@ -13,6 +13,10 @@ public class Entity {
 
     protected String type;
     protected Map<String,String> fields;
+
+    public Entity() {
+        fields = new HashMap<String, String>();
+    }
 
     @XmlAttribute(name = "Type")
     public String getType() {
