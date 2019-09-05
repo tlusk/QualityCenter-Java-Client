@@ -16,11 +16,13 @@ public class RestCallHandler {
     private final String username;
     private final String password;
     private String sessionKey;
+    private Boolean loggedIn;
 
     public RestCallHandler(String host, String username, String password) {
         this.host = host;
         this.username = username;
         this.password = password;
+        this.loggedIn = false;
     }
 
     public <T> T getRestData(Class<T> retType, String restUrl) {
@@ -40,6 +42,16 @@ public class RestCallHandler {
 
         Response response = webTarget.request(MediaType.TEXT_PLAIN_TYPE).get();
         sessionKey = response.getHeaderString("Set-Cookie").split("=")[1].split(" ")[0];
+        this.loggedIn = true;
+    }
+
+    public void logout() {
+        buildRestRequest("/qcbin/authentication-point/logout").get();
+        this.loggedIn = false;
+    }
+
+    public boolean isLoggedIn() {
+        return loggedIn;
     }
 
     private Invocation.Builder buildRestRequest(String restUrl) {

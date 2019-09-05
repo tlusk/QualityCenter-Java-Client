@@ -16,6 +16,10 @@ public class QCRestClient {
         callHandler.login();
     }
 
+    public void logout() { callHandler.logout(); }
+
+    public boolean isLoggedIn() { return callHandler.isLoggedIn(); }
+
     public Domains getDomains() {
         return callHandler.getRestData(Domains.class, "rest/domains");
     }
