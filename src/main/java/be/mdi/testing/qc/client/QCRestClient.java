@@ -1,11 +1,8 @@
 package be.mdi.testing.qc.client;
 
 import be.mdi.testing.qc.model.entities.Defect;
-import be.mdi.testing.qc.model.Domain;
-import be.mdi.testing.qc.model.Project;
-
-import javax.ws.rs.core.GenericType;
-import java.util.List;
+import be.mdi.testing.qc.model.Domains;
+import be.mdi.testing.qc.model.Projects;
 
 public class QCRestClient {
 
@@ -19,12 +16,12 @@ public class QCRestClient {
         callHandler.login();
     }
 
-    public List<Domain> getDomains() {
-        return callHandler.getRestData(new GenericType<List<Domain>>() {}, "rest/domains");
+    public Domains getDomains() {
+        return callHandler.getRestData(Domains.class, "rest/domains");
     }
 
-    public List<Project> getProjects(String domain) {
-        return callHandler.getRestData(new GenericType<List<Project>>(){}, "rest/domains/" + domain + "/projects");
+    public Projects getProjects(String domain) {
+        return callHandler.getRestData(Projects.class, "rest/domains/" + domain + "/projects");
     }
 
     public Defect getDefect(String domain, String project, int defectId) {

@@ -1,6 +1,4 @@
 //Testing
-import org.junit.After;
-import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 
@@ -23,16 +21,6 @@ import javax.xml.bind.Marshaller;
 public class DefectTest {
 
     private ClientAndServer mockServer;
-
-    @Before
-    public void startMockServer() {
-        mockServer = startClientAndServer(1080);
-    }
-
-    @After
-    public void stopMockServer() {
-        mockServer.stop();
-    }
 
     @Test
     public void theModelGeneratesAValidXmlTest() throws JAXBException {
