@@ -4,8 +4,8 @@ import be.mdi.testing.qc.model.fields.DefectField;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "Entity")
-public class Defect extends Entity {
+@XmlRootElement(name = "QcEntity")
+public class Defect extends QcEntity {
 
     public Defect() {
         setType("defect");

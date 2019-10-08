@@ -14,12 +14,14 @@ public class Domain {
     public String getName() {
         return name;
     }
-
-    @XmlElement(name = "Projects", required = false)
+    @XmlElement(name = "Projects")
     public Projects getProjects() { return projects; }
 
-    public void setName(String name) {
+    private void setName(String name) {
         this.name = name;
     }
-    public void setProjects(Projects projects) { this.projects = projects; }
+
+    private void setProjects(Projects projects) {
+        this.projects = projects;
+    }
 }

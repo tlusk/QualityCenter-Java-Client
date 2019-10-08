@@ -40,7 +40,7 @@ public class DefectTest {
         marshallerObj.marshal(testDefect, sw);
 
         Assertions.assertEquals(sw.toString(), "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
-                "<Entity Type=\"defect\">\n" +
+                "<QcEntity Type=\"defect\">\n" +
                 "    <Fields>\n" +
                 "        <Field Name=\"description\">\n" +
                 "            <Value>the description</Value>\n" +
@@ -49,7 +49,7 @@ public class DefectTest {
                 "            <Value>2019-07-20</Value>\n" +
                 "        </Field>\n" +
                 "    </Fields>\n" +
-                "</Entity>\n");
+                "</QcEntity>\n");
 
         System.out.println(sw.toString());
     }
@@ -63,7 +63,7 @@ public class DefectTest {
                         .withHeader("Content-Type", "application/xml")
                         .withCookie("some-cookie", "to avoid default")
                         .withBody("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
-                                "<Entity Type=\"defect\">\n" +
+                                "<QcEntity Type=\"defect\">\n" +
                                 "    <Fields>\n" +
                                 "        <Field Name=\"description\">\n" +
                                 "            <Value>the description</Value>\n" +
@@ -72,7 +72,7 @@ public class DefectTest {
                                 "            <Value>2019-07-20</Value>\n" +
                                 "        </Field>\n" +
                                 "    </Fields>\n" +
-                                "</Entity>"));
+                                "</QcEntity>"));
 
         QCRestClient qcc = new QCRestClient("http://127.0.0.1:1080", "abc", "def");
         Defect defect = qcc.getDefect("theDomain", "theProject", 1);

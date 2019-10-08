@@ -1,12 +1,9 @@
 package be.mdi.testing.qc.client;
 
+import be.mdi.testing.qc.model.entities.QcEntity;
 import org.glassfish.jersey.client.filter.HttpBasicAuthFilter;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Invocation;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.GenericType;
+import javax.ws.rs.client.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -30,9 +27,14 @@ public class RestCallHandler {
         return invocationBuilder.get().readEntity(retType);
     }
 
-    public <T> T getRestData(GenericType<T> retType, String restUrl) {
+    public void postRestData(QcEntity qcEntity, String restUrl) {
         Invocation.Builder invocationBuilder = buildRestRequest(restUrl);
-        return invocationBuilder.get().readEntity(retType);
+        invocationBuilder.post(Entity.entity(qcEntity, MediaType.APPLICATION_XML_TYPE));
+    }
+
+    public void putRestData(QcEntity qcEntity, String restUrl) {
+        Invocation.Builder invocationBuilder = buildRestRequest(restUrl);
+        invocationBuilder.put(Entity.entity(qcEntity, MediaType.APPLICATION_XML));
     }
 
     public void login() {

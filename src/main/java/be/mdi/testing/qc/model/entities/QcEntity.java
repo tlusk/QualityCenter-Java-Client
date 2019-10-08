@@ -9,12 +9,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Entity {
+public class QcEntity {
 
     protected String type;
     protected Map<String,String> fields;
 
-    public Entity() {
+    public QcEntity() {
         fields = new HashMap<String, String>();
     }
 

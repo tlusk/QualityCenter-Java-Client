@@ -69,7 +69,6 @@ public class DomainsTest {
         mockServer.stop();
     }
 
-    //TODO write test so that the domain names are put to a list when there's projects included.
     @Test
     public void theMethodCanGenerateAnObjectFromAValidXmlForThreeDomainsAndPrintFullListWithProjects() {
         List<String> listToVerifyAgainst = new ArrayList<String>();
@@ -79,25 +78,28 @@ public class DomainsTest {
 
         mockServer = startClientAndServer(1080);
         mockServer
-                .when(request("/qcbin/rest/domains"))
+                .when(request("/qcbin/rest/domains")
+                        .withQueryStringParameter("include-projects-info", "y"))
                 .respond(response()
                         .withHeader("Content-Type", "application/xml")
                         .withCookie("some-cookie", "to avoid default")
                         .withBody("<Domains>\n" +
-                                "       <Domain Name=\"Domain_NAME_1\"/>\n" +
+                                "       <Domain Name=\"Domain_NAME_1\">\n" +
+                                "           <Projects>" +
+                                "               <Project Name=\"The_projectName\"/>" +
+                                "           </Projects>" +
+                                "       </Domain>" +
                                 "       <Domain Name=\"Domain_NAME_2\"/>\n" +
                                 "       <Domain Name=\"Domain_NAME_3\"/>\n" +
                                 "</Domains>"));
 
         QCRestClient qcc = new QCRestClient("http://127.0.0.1:1080", "abc", "def");
-        Domains domains = qcc.getDomains();
+        Domains domains = qcc.getDomainsWithProjects();
 
         System.out.println(domains.getNames().toString());
         assert domains.getNames().equals(listToVerifyAgainst);
+        assert domains.get(0).getProjects().get(0).getName().equals("The_projectName");
 
         mockServer.stop();
     }
-
-    //TODO write test that checks if domains and properties are hierarchically correctly represented.
-
 }
