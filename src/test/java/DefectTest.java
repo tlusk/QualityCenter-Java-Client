@@ -17,6 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 //Testing
+import be.mdi.testing.qc.model.entities.QcDefect;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 
@@ -27,8 +28,7 @@ import static org.mockserver.model.HttpResponse.response;
 
 //Project
 import be.mdi.testing.qc.client.QCRestClient;
-import be.mdi.testing.qc.model.entities.Defect;
-import be.mdi.testing.qc.model.fields.DefectField;
+import be.mdi.testing.qc.model.fields.QcDefectField;
 
 //Support
 import java.io.StringWriter;
@@ -43,14 +43,14 @@ public class DefectTest {
     @Test
     public void theModelGeneratesAValidXmlTest() throws JAXBException {
 
-        Defect testDefect = new Defect();
+        QcDefect testDefect = new QcDefect();
 
-        testDefect.setField(DefectField.DESCRIPTION, "the description");
-        testDefect.setField(DefectField.CLOSING_DATE, "2019-07-20");
+        testDefect.setField(QcDefectField.DESCRIPTION, "the description");
+        testDefect.setField(QcDefectField.CLOSING_DATE, "2019-07-20");
 
         StringWriter sw = new StringWriter();
 
-        JAXBContext contextObj = JAXBContext.newInstance(Defect.class);
+        JAXBContext contextObj = JAXBContext.newInstance(QcDefect.class);
         Marshaller marshallerObj = contextObj.createMarshaller();
         marshallerObj.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
         marshallerObj.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
@@ -93,10 +93,10 @@ public class DefectTest {
                                 "</QcEntity>"));
 
         QCRestClient qcc = new QCRestClient("http://127.0.0.1:1080", "abc", "def");
-        Defect defect = qcc.getDefect("theDomain", "theProject", 1);
+        QcDefect defect = qcc.getDefect("theDomain", "theProject", 1);
 
-        System.out.println(defect.getField(DefectField.DESCRIPTION));
-        assert defect.getField(DefectField.DESCRIPTION).equals("the description");
+        System.out.println(defect.getField(QcDefectField.DESCRIPTION));
+        assert defect.getField(QcDefectField.DESCRIPTION).equals("the description");
 
         mockServer.stop();
     }

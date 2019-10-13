@@ -29,6 +29,9 @@ import java.util.Map;
 
 public class QcEntity {
 
+    protected String domain;
+    protected String project;
+
     protected String type;
     protected Map<String,String> fields;
 
@@ -44,11 +47,21 @@ public class QcEntity {
     public void setType(String type) {
         this.type = type;
     }
+    public void setDomain(String domain) { this.domain = domain; }
+    public void setProject(String project) { this.project = project; }
 
     @XmlElement(name = "Fields")
     @XmlJavaTypeAdapter(MapFieldsAdapter.class)
-    protected Map<String,String> getFields() {
+    public Map<String,String> getFields() {
         return fields;
+    }
+
+    public String getDomain() {
+        return domain;
+    }
+
+    public String getProject() {
+        return project;
     }
 
     protected void setFields(Map<String,String> fields) {

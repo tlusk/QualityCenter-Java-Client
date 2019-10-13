@@ -18,29 +18,22 @@
  */
 package be.mdi.testing.qc.model.entities;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
+import be.mdi.testing.qc.model.fields.QcDefectField;
+
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.List;
 
-@XmlRootElement(name = "Entities")
-public class QcEntities {
+@XmlRootElement(name = "Entity")
+public class QcDefect extends QcEntity {
 
-    @XmlAttribute(name = "TotalResults")
-    public int totalresults;
-
-    @XmlElement(name = "Entity")
-    public List<QcEntity> entities;
-
-    public QcEntity get(int index) {
-        return entities.get(index);
+    public QcDefect() {
+        setType("defect");
     }
 
-    public int getTotalresults() {
-        return totalresults;
+    public String getField(QcDefectField field) {
+        return fields.get(field.getName());
     }
 
-    private void setTotalresults(int totalResults) {
-        this.totalresults = totalResults;
+    public void setField(QcDefectField field, String value) {
+        fields.put(field.getName(), value);
     }
 }

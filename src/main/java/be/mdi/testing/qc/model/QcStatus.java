@@ -16,31 +16,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package be.mdi.testing.qc.model.entities;
+package be.mdi.testing.qc.model;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import java.util.List;
+public enum QcStatus {
+    PASSED("Passed"),
+    FAILED("Failed"),
+    NO_RUN("No run"),
+    NOT_COMPLETED("Not completed"),
+    BLOCKED("Blocked");
 
-@XmlRootElement(name = "Entities")
-public class QcEntities {
+    private String status;
 
-    @XmlAttribute(name = "TotalResults")
-    public int totalresults;
-
-    @XmlElement(name = "Entity")
-    public List<QcEntity> entities;
-
-    public QcEntity get(int index) {
-        return entities.get(index);
+    QcStatus(String status) {
+        this.status = status;
     }
 
-    public int getTotalresults() {
-        return totalresults;
-    }
-
-    private void setTotalresults(int totalResults) {
-        this.totalresults = totalResults;
+    public String getName() {
+        return this.status;
     }
 }

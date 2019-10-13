@@ -18,7 +18,7 @@
  */
 package be.mdi.testing.qc.model.fields;
 
-public enum DefectField {
+public enum QcDefectField {
     ACTUAL_FIX_TIME("actual-fix-time"),
     ATTACHMENT("attachment"),
     BUG_ID("id"),
@@ -84,7 +84,7 @@ public enum DefectField {
 
     private String name;
 
-    DefectField(String name) {
+    QcDefectField(String name) {
         this.name = name;
     }
 
