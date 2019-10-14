@@ -18,6 +18,8 @@ Included:
   * Domains
 * Entity (QcEntity)
   * Defect (QcDefect)
+  * Run (QcRun)
+  * Run Step (QcRunStep)
 * Entity Collection (QcEntities) (can be with any QcEntity types that are defined)
 * Entity Fields (Enum for API type-ahead convenience -> the type_user_01 fields and so on may be named meaningfully in the enum for a specific implementation)
   * DefectField
