@@ -52,9 +52,10 @@ public class RestCallHandler {
         return response.getStatus();
     }
 
-    public void putRestData(QcEntity qcEntity, String restUrl) {
+    public Integer putRestData(QcEntity qcEntity, String restUrl) {
         Invocation.Builder invocationBuilder = buildRestRequest(restUrl);
-        invocationBuilder.put(Entity.entity(qcEntity, MediaType.APPLICATION_XML));
+        Response response = invocationBuilder.put(Entity.entity(qcEntity, MediaType.APPLICATION_XML));
+        return response.getStatus();
     }
 
     public void login() {

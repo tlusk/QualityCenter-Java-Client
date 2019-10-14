@@ -64,7 +64,7 @@ public class QCRestClient {
     }
 
     public Integer putEntity(QcEntity entity) {
-        return callHandler.postRestData(entity, entity.getUrl());
+        return callHandler.putRestData(entity, entity.getUrl());
     }
 
     // QcDefect
@@ -77,17 +77,17 @@ public class QCRestClient {
         return e;
     }
 
-    // Create new run with result for specific test instance
-    // in first instance --> assume that if multiple are returned, must take the first one.
-    // Just to be robust at the start - we must manage this more elegantly.
-    // Note that to create a run and set the status you need to:
-    //    1. Create a run with status "Not Completed" -- Yes, this is necessary
-    //    2. Update the run with the correct status.
-    // Reference: https://lobsterautomation.wordpress.com/2017/01/18/hp-alm-rest-api/
-    // The first approach is to update based on the combination of a specific Test instance id based on:
-    //     - the test set id
-    //     - the test config id
-    // A later approach may include searching for a configuration in a test set linked to a specific cycle
+    /* Create new run with result for specific test instance
+    * in first instance --> assume that if multiple are returned, must take the first one.
+    * Just to be robust at the start - we must manage this more elegantly.
+    * Note that to create a run and set the status you need to:
+    *    1. Create a run with status "Not Completed" -- Yes, this is necessary
+    *    2. Update the run with the correct status.
+    * Reference: https://lobsterautomation.wordpress.com/2017/01/18/hp-alm-rest-api/
+    * The first approach is to update based on the combination of a specific Test instance id based on:
+    *     - the test set id
+    *     - the test config id
+    * A later approach may include searching for a configuration in a test set linked to a specific cycle*/
     public void createRunForResult(String domain, String project, QcRun qcRun, QcStatus status) {
 
     }
