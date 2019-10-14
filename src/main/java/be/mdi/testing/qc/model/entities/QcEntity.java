@@ -18,8 +18,11 @@
  */
 package be.mdi.testing.qc.model.entities;
 
+import be.mdi.testing.qc.model.QcType;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.ArrayList;
@@ -27,12 +30,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 public class QcEntity {
 
     protected String domain;
     protected String project;
+    protected QcType qcType;
 
     protected String type;
+
     protected Map<String,String> fields;
 
     public QcEntity() {
@@ -40,13 +46,24 @@ public class QcEntity {
     }
 
     @XmlAttribute(name = "Type")
-    public String getType() {
-        return type;
+    public String getType() { return type; }
+    @XmlTransient
+    public String getDomain() { return domain; }
+    @XmlTransient
+    public String getProject() { return project; }
+    @XmlTransient
+    public QcType getQcType() { return qcType; }
+
+    public String getUrl() {
+        String url =  "rest/domains/" + domain + "/projects/" + project + qcType.getEntityUrl();
+        if(getFields().get("id") != null) {
+            url += "/" + getFields().get("id");
+        }
+        return url;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
+    public void setType(String type) { this.type = type; }
+    public void setQcType(QcType qcType) { this.qcType = qcType; }
     public void setDomain(String domain) { this.domain = domain; }
     public void setProject(String project) { this.project = project; }
 
@@ -56,14 +73,6 @@ public class QcEntity {
         return fields;
     }
 
-    public String getDomain() {
-        return domain;
-    }
-
-    public String getProject() {
-        return project;
-    }
-
     protected void setFields(Map<String,String> fields) {
         this.fields = fields;
     }
@@ -71,7 +80,7 @@ public class QcEntity {
 
 class MapFieldsAdapter extends XmlAdapter<ValueList, Map<String, String>> {
     @Override
-    public Map<String, String> unmarshal(ValueList value) throws Exception {
+    public Map<String, String> unmarshal(ValueList value) {
         Map<String, String> map = new HashMap<String, String>();
 
         for (ValuePair entry : value.entries) {
@@ -82,7 +91,7 @@ class MapFieldsAdapter extends XmlAdapter<ValueList, Map<String, String>> {
     }
 
     @Override
-    public ValueList marshal(Map<String, String> value) throws Exception {
+    public ValueList marshal(Map<String, String> value) {
         ValueList map = new ValueList();
         map.entries = new ArrayList<ValuePair>();
         for (String name : value.keySet()) {
@@ -97,7 +106,7 @@ class MapFieldsAdapter extends XmlAdapter<ValueList, Map<String, String>> {
 
 class ValueList {
     @XmlElement(name="Field")
-    public List<ValuePair> entries;
+    List<ValuePair> entries;
 }
 
 class ValuePair {
@@ -105,5 +114,5 @@ class ValuePair {
     public String name;
 
     @XmlElement(name="Value")
-    public String value;
+    String value;
 }

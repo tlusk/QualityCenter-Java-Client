@@ -46,9 +46,10 @@ public class RestCallHandler {
         return invocationBuilder.get().readEntity(retType);
     }
 
-    public void postRestData(QcEntity qcEntity, String restUrl) {
+    public Integer postRestData(QcEntity qcEntity, String restUrl) {
         Invocation.Builder invocationBuilder = buildRestRequest(restUrl);
-        invocationBuilder.post(Entity.entity(qcEntity, MediaType.APPLICATION_XML_TYPE));
+        Response response = invocationBuilder.post(Entity.entity(qcEntity, MediaType.APPLICATION_XML_TYPE));
+        return response.getStatus();
     }
 
     public void putRestData(QcEntity qcEntity, String restUrl) {
@@ -60,7 +61,6 @@ public class RestCallHandler {
         Client client = ClientBuilder.newClient();
         client.register(new HttpBasicAuthFilter(username, password));
         WebTarget webTarget = client.target(host + "/qcbin/authentication-point/authenticate");
-
         Response response = webTarget.request(MediaType.TEXT_PLAIN_TYPE).get();
         sessionKey = response.getHeaderString("Set-Cookie").split("=")[1].split(" ")[0];
         this.loggedIn = true;

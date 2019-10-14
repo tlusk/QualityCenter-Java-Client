@@ -24,7 +24,6 @@ import be.mdi.testing.qc.model.Domains;
 import be.mdi.testing.qc.model.Projects;
 import be.mdi.testing.qc.model.entities.QcEntity;
 import be.mdi.testing.qc.model.entities.QcRun;
-import be.mdi.testing.qc.model.fields.QcDefectField;
 
 public class QCRestClient {
 
@@ -59,44 +58,23 @@ public class QCRestClient {
     }
 
     //Generic - links deduced with type, project and domain
-    public void postEntity(QcEntity entity) {
-        callHandler.postRestData(
-                entity,
-                "rest/domains/" + entity.getDomain() +
-                        "/projects/" + entity.getProject() +
-                        "/" + entity.getType() + "s/"
-        );
+    public Integer postEntity(QcEntity entity) {
+        return
+        callHandler.postRestData(entity, entity.getUrl());
     }
 
-    public void putEntity(QcEntity entity) {
-        callHandler.putRestData(
-                entity,
-                "rest/domains/" + entity.getDomain() +
-                "/projects/" + entity.getProject() + "/" +
-                entity.getType() + "s/" +
-                entity.getFields().get("id")
-        );
+    public Integer putEntity(QcEntity entity) {
+        return callHandler.postRestData(entity, entity.getUrl());
     }
 
     // QcDefect
     public QcDefect getDefect(String domain, String project, int defectId) {
-        return callHandler.getRestData(
+        QcDefect e = callHandler.getRestData(
                 QcDefect.class,
                 "rest/domains/" + domain + "/projects/" + project + "/defects/" + defectId);
-    }
-
-    public void postDefect(String domain, String project, QcDefect defect) {
-        callHandler.postRestData(
-                defect,
-                "rest/domains/" + domain + "/projects/" + project + "/defects/");
-    }
-
-    public void putDefect(String domain, String project, QcDefect defect) {
-        callHandler.putRestData(
-                defect,
-                "rest/domains/" + domain +
-                        "/projects/" + project +
-                        "/defects/" + defect.getField(QcDefectField.BUG_ID));
+        e.setProject(project);
+        e.setDomain(domain);
+        return e;
     }
 
     // Create new run with result for specific test instance

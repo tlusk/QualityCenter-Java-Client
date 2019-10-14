@@ -16,26 +16,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package be.mdi.testing.qc.model.entities;
 
 import be.mdi.testing.qc.model.QcType;
-import be.mdi.testing.qc.model.fields.QcDefectField;
+import org.junit.jupiter.api.Test;
 
-import javax.xml.bind.annotation.XmlRootElement;
+public class QcTypeTest {
 
-@XmlRootElement(name = "Entity")
-public class QcDefect extends QcEntity {
-
-    public QcDefect() {
-        setQcType(QcType.DEFECT);
-        setType("defect");
+    @Test
+    public void theQcTypeObjectReturnValues() {
+        QcType t = QcType.DEFECT;
+        assert t.getDbType().equals("BUG");
+        assert t.getSmallCapType().equals("defect");
+        assert t.getRestUrlType().equals("defects");
+        assert t.getTypeParent() == null;
     }
 
-    public String getField(QcDefectField field) {
-        return fields.get(field.getName());
+    @Test
+    public void theQcTypeObjectReturnsALinkForItemWithoutParent() {
+        QcType t = QcType.DEFECT;
+        System.out.println(t.getEntityUrl());
+        assert t.getEntityUrl().equals("/defects");
     }
 
-    public void setField(QcDefectField field, String value) {
-        fields.put(field.getName(), value);
+    @Test
+    void theQcTypeObjectReturnsALinkForItemWithParent() {
+        QcType t = QcType.RUN_STEP;
+        assert t.getEntityUrl().equals("/runs/run-steps");
     }
 }

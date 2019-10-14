@@ -17,6 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import be.mdi.testing.qc.client.QCRestClient;
+import be.mdi.testing.qc.model.entities.QcDefect;
+import be.mdi.testing.qc.model.fields.QcDefectField;
 import org.junit.jupiter.api.Test;
 import org.mockserver.integration.ClientAndServer;
 
@@ -70,6 +72,80 @@ public class BasicClientTest {
 
         assert qcc.isLoggedIn() == false;
 
+
+        mockServer.stop();
+    }
+
+    @Test
+    public void theClientCanUseAnEntityObjectToDeferAGenericTypeForAPost() {
+        mockServer = startClientAndServer(1080);
+        mockServer
+                .when(request("/qcbin/rest/domains/theDomain/projects/theProject/defects")
+                .withBody("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" +
+                          "<Entity Type=\"defect\">" +
+                              "<Fields>" +
+                                  "<Field Name=\"description\">" +
+                                      "<Value>the description</Value>" +
+                                  "</Field>" +
+                                  "<Field Name=\"closing-date\">" +
+                                      "<Value>2019-07-20</Value>" +
+                                  "</Field>" +
+                              "</Fields>" +
+                          "</Entity>"))
+
+                .respond(response()
+                        .withHeader("Content-Type", "application/xml")
+                        .withStatusCode(201)
+                        .withCookie("some-cookie", "to avoid default"));
+
+        QCRestClient qcc = new QCRestClient("http://127.0.0.1:1080", "abc", "def");
+
+        QcDefect d = new QcDefect();
+        d.setProject("theProject");
+        d.setDomain(("theDomain"));
+        d.setField(QcDefectField.DESCRIPTION, "the description");
+        d.setField(QcDefectField.CLOSING_DATE, "2019-07-20");
+
+        assert qcc.postEntity(d) == 201;
+
+        mockServer.stop();
+    }
+
+    @Test
+    public void theClientCanUseAnEntityObjectToDeferAGenericTypeForAPut() {
+        mockServer = startClientAndServer(1080);
+        mockServer
+                .when(request("/qcbin/rest/domains/theDomain/projects/theProject/defects/1")
+                        .withBody("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" +
+                                "<Entity Type=\"defect\">" +
+                                "<Fields>" +
+                                "<Field Name=\"description\">" +
+                                "<Value>the description</Value>" +
+                                "</Field>" +
+                                "<Field Name=\"id\">" +
+                                "<Value>1</Value>" +
+                                "</Field>" +
+                                "<Field Name=\"closing-date\">" +
+                                "<Value>2019-07-20</Value>" +
+                                "</Field>" +
+                                "</Fields>" +
+                                "</Entity>"))
+
+                .respond(response()
+                        .withHeader("Content-Type", "application/xml")
+                        .withStatusCode(201)
+                        .withCookie("some-cookie", "to avoid default"));
+
+        QCRestClient qcc = new QCRestClient("http://127.0.0.1:1080", "abc", "def");
+
+        QcDefect d = new QcDefect();
+        d.setProject("theProject");
+        d.setDomain(("theDomain"));
+        d.setField(QcDefectField.DESCRIPTION, "the description");
+        d.setField(QcDefectField.CLOSING_DATE, "2019-07-20");
+        d.setField(QcDefectField.BUG_ID, "1");
+
+        assert qcc.putEntity(d) == 201;
 
         mockServer.stop();
     }

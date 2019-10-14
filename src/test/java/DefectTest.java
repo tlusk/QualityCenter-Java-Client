@@ -58,7 +58,7 @@ public class DefectTest {
         marshallerObj.marshal(testDefect, sw);
 
         Assertions.assertEquals(sw.toString(), "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
-                "<QcEntity Type=\"defect\">\n" +
+                "<Entity Type=\"defect\">\n" +
                 "    <Fields>\n" +
                 "        <Field Name=\"description\">\n" +
                 "            <Value>the description</Value>\n" +
@@ -67,9 +67,28 @@ public class DefectTest {
                 "            <Value>2019-07-20</Value>\n" +
                 "        </Field>\n" +
                 "    </Fields>\n" +
-                "</QcEntity>\n");
+                "</Entity>\n");
 
         System.out.println(sw.toString());
+    }
+
+    @Test
+    public void getTheUrlForTheDefectObjectWithoutIdDefined() {
+        QcDefect d = new QcDefect();
+        d.setDomain("theDomain");
+        d.setProject("theProject");
+
+        assert d.getUrl().equals("rest/domains/theDomain/projects/theProject/defects");
+    }
+
+    @Test
+    public void getTheUrlForTheDefectObjectWithTheIdDefined() {
+        QcDefect d = new QcDefect();
+        d.setDomain("theDomain");
+        d.setProject("theProject");
+        d.setField(QcDefectField.BUG_ID, "1");
+
+        assert d.getUrl().equals("rest/domains/theDomain/projects/theProject/defects/1");
     }
 
     @Test
@@ -81,7 +100,7 @@ public class DefectTest {
                         .withHeader("Content-Type", "application/xml")
                         .withCookie("some-cookie", "to avoid default")
                         .withBody("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
-                                "<QcEntity Type=\"defect\">\n" +
+                                "<Entity Type=\"defect\">\n" +
                                 "    <Fields>\n" +
                                 "        <Field Name=\"description\">\n" +
                                 "            <Value>the description</Value>\n" +
@@ -90,13 +109,15 @@ public class DefectTest {
                                 "            <Value>2019-07-20</Value>\n" +
                                 "        </Field>\n" +
                                 "    </Fields>\n" +
-                                "</QcEntity>"));
+                                "</Entity>"));
 
         QCRestClient qcc = new QCRestClient("http://127.0.0.1:1080", "abc", "def");
         QcDefect defect = qcc.getDefect("theDomain", "theProject", 1);
 
         System.out.println(defect.getField(QcDefectField.DESCRIPTION));
         assert defect.getField(QcDefectField.DESCRIPTION).equals("the description");
+        assert defect.getProject().equals("theProject");
+        assert defect.getDomain().equals("theDomain");
 
         mockServer.stop();
     }
