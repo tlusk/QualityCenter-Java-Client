@@ -40,6 +40,8 @@ The API is written with automated test execution in mind.
 
 It might strike as odd for some people to pump results into QC from automated runs. Of course you need to be pragmatic about this. Not each unit test, but the results of the functional automated tests that have merit to keep as a later reference may be stored in Quality Center to guard an aggregated view over all test efforts.
 
+Because of this viewpopint the API will not contain all entities. The focus lies on supporting the collection of results from sources outside of Quality Center. The actual test management should - in my opinion - not be handed over.
+
 There exist options already. This API is both an exercise for myself and something that I think is useful to share.
 
 I found the start from the guy where I forded the repo from, but I would like to stress that the core idea of this setup and the first steps in developing this client were taken by a helpful colleague at a previous employer. Thank you Stephan for handing me the groudworks for something that proved to be quite useful over the remainder of the time I spent at Fednot.
