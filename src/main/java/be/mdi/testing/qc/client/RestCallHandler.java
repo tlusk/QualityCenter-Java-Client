@@ -26,7 +26,7 @@ import javax.ws.rs.client.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-public class RestCallHandler {
+class RestCallHandler {
 
     private final String host;
     private final String username;
@@ -34,31 +34,31 @@ public class RestCallHandler {
     private String sessionKey;
     private Boolean loggedIn;
 
-    public RestCallHandler(String host, String username, String password) {
+    RestCallHandler(String host, String username, String password) {
         this.host = host;
         this.username = username;
         this.password = password;
         this.loggedIn = false;
     }
 
-    public <T> T getRestData(Class<T> retType, String restUrl) {
+    <T> T getRestData(Class<T> retType, String restUrl) {
         Invocation.Builder invocationBuilder = buildRestRequest(restUrl);
         return invocationBuilder.get().readEntity(retType);
     }
 
-    public Integer postRestData(QcEntity qcEntity, String restUrl) {
+    Integer postRestData(QcEntity qcEntity, String restUrl) {
         Invocation.Builder invocationBuilder = buildRestRequest(restUrl);
         Response response = invocationBuilder.post(Entity.entity(qcEntity, MediaType.APPLICATION_XML_TYPE));
         return response.getStatus();
     }
 
-    public Integer putRestData(QcEntity qcEntity, String restUrl) {
+    Integer putRestData(QcEntity qcEntity, String restUrl) {
         Invocation.Builder invocationBuilder = buildRestRequest(restUrl);
         Response response = invocationBuilder.put(Entity.entity(qcEntity, MediaType.APPLICATION_XML));
         return response.getStatus();
     }
 
-    public void login() {
+    void login() {
         Client client = ClientBuilder.newClient();
         client.register(new HttpBasicAuthFilter(username, password));
         WebTarget webTarget = client.target(host + "/qcbin/authentication-point/authenticate");
@@ -67,12 +67,12 @@ public class RestCallHandler {
         this.loggedIn = true;
     }
 
-    public void logout() {
+    void logout() {
         buildRestRequest("/qcbin/authentication-point/logout").get();
         this.loggedIn = false;
     }
 
-    public boolean isLoggedIn() {
+    boolean isLoggedIn() {
         return loggedIn;
     }
 

@@ -18,6 +18,7 @@
  */
 package be.mdi.testing.qc.model.entities;
 
+import be.mdi.testing.qc.model.QcType;
 import be.mdi.testing.qc.model.fields.QcRunStepField;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -26,7 +27,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class QcRunStep extends QcEntity {
 
     public QcRunStep() {
-        setType("run-step");
+        super();
+        setQcType(QcType.RUN_STEP);
     }
 
     public String getField(QcRunStepField field) {

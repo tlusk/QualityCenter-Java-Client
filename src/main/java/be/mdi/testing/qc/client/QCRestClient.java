@@ -19,11 +19,10 @@
 package be.mdi.testing.qc.client;
 
 import be.mdi.testing.qc.model.QcStatus;
-import be.mdi.testing.qc.model.entities.QcDefect;
+import be.mdi.testing.qc.model.QcType;
+import be.mdi.testing.qc.model.entities.*;
 import be.mdi.testing.qc.model.Domains;
 import be.mdi.testing.qc.model.Projects;
-import be.mdi.testing.qc.model.entities.QcEntity;
-import be.mdi.testing.qc.model.entities.QcRun;
 
 public class QCRestClient {
 
@@ -67,15 +66,90 @@ public class QCRestClient {
         return callHandler.putRestData(entity, entity.getUrl());
     }
 
-    // QcDefect
-    public QcDefect getDefect(String domain, String project, int defectId) {
-        QcDefect e = callHandler.getRestData(
-                QcDefect.class,
-                "rest/domains/" + domain + "/projects/" + project + "/defects/" + defectId);
+    //Generic get
+    private <T extends QcEntity> T getEntity(Class<T> retType, QcType qcType, String domain, String project, Integer entityId, Integer parentId) {
+
+        T e = callHandler.getRestData(
+                retType,
+                getEntityGetUrl(qcType, domain, project, entityId, parentId)
+        );
+
         e.setProject(project);
         e.setDomain(domain);
         return e;
     }
+
+    private <T extends QcEntities & QcEntitiesInterface> T getEntities(Class<T> retType, QcType qcType, String domain, String project) {
+
+        T es = callHandler.getRestData(
+                retType,
+                getEntityGetUrl(qcType, domain, project, null, null)
+        );
+
+        es.setProject(project);
+        es.setDomain(domain);
+        return es;
+    }
+
+    private String getEntityGetUrl(QcType qcType, String domain, String project, Integer entityId, Integer parentId) {
+        String url = "rest/domains/" + domain + "/projects/" + project + "/";
+
+        if(qcType.hasTypeParent() && parentId != null) {
+            url += qcType.getParentType().getRestUrlType() + "/" + parentId + "/";
+        }
+
+        url += qcType.getRestUrlType();
+
+        if(entityId != null) {
+            url += "/" + entityId;
+        }
+
+        return url;
+    }
+
+    public QcDefect getDefect(String domain, String project, Integer defectId) {
+        return getEntity(
+                QcDefect.class,
+                QcType.DEFECT,
+                domain,
+                project,
+                defectId,
+                null
+                );
+    }
+
+    public QcDefects getDefects(String domain, String project) {
+        return getEntities(
+                QcDefects.class,
+                QcType.DEFECT,
+                domain,
+                project
+        );
+    }
+
+    public QcRun getRun(String domain, String project, int runId) {
+        return getEntity(
+                QcRun.class,
+                QcType.RUN,
+                domain,
+                project,
+                runId,
+                null
+        );
+    }
+
+    public QcRunStep getRunStep(String domain, String project, int runId, int runStepId) {
+        return getEntity(
+                QcRunStep.class,
+                QcType.RUN_STEP,
+                domain,
+                project,
+                runStepId,
+                runId
+        );
+    }
+
+
 
     /* Create new run with result for specific test instance
     * in first instance --> assume that if multiple are returned, must take the first one.

@@ -19,28 +19,28 @@
 package be.mdi.testing.qc.model.entities;
 
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import java.util.List;
+import javax.xml.bind.annotation.XmlTransient;
 
-@XmlRootElement(name = "Entities")
+
 public class QcEntities {
 
     @XmlAttribute(name = "TotalResults")
-    public int totalresults;
+    private int totalresults;
 
-    @XmlElement(name = "Entity")
-    public List<QcEntity> entities;
-
-    public QcEntity get(int index) {
-        return entities.get(index);
-    }
+    @XmlTransient
+    private String project;
+    @XmlTransient
+    private String domain;
 
     public int getTotalresults() {
         return totalresults;
     }
+    public String getDomain() { return domain; }
+    public String getProject() { return project; }
 
     private void setTotalresults(int totalResults) {
         this.totalresults = totalResults;
     }
+    public void setDomain(String domain) { this.domain = domain; }
+    public void setProject(String project) {this.project = project; }
 }

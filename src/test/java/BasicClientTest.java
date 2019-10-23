@@ -26,13 +26,14 @@ import static org.mockserver.integration.ClientAndServer.startClientAndServer;
 import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
 
+
 public class BasicClientTest {
 
     private ClientAndServer mockServer;
 
     @Test
     public void theClientCanLogIn() {
-        mockServer = startClientAndServer(1080);
+        mockServer = startClientAndServer(1081);
         mockServer
                 .when(request("/qcbin/authentication-point/authenticate")
                         .withHeader("Authorization", "Basic dXNlcm5hbWU6cGFzc3dvcmQ="))
@@ -40,12 +41,9 @@ public class BasicClientTest {
                         .withHeader("Content-Type", "application/xml")
                         .withCookie("LWSSO_COOKIE_KEY", "akeyvalue"));
 
-        QCRestClient qcc = new QCRestClient("http://127.0.0.1:1080", "username", "password");
+        QCRestClient qcc = new QCRestClient("http://127.0.0.1:1081", "username", "password");
 
-        qcc.login();
-
-        assert qcc.isLoggedIn() == true;
-
+        assert qcc.login().isLoggedIn() == true;
 
         mockServer.stop();
     }
@@ -78,7 +76,7 @@ public class BasicClientTest {
 
     @Test
     public void theClientCanUseAnEntityObjectToDeferAGenericTypeForAPost() {
-        mockServer = startClientAndServer(1080);
+        mockServer = startClientAndServer(1082);
         mockServer
                 .when(request("/qcbin/rest/domains/theDomain/projects/theProject/defects")
                 .withBody("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" +
@@ -98,7 +96,7 @@ public class BasicClientTest {
                         .withStatusCode(201)
                         .withCookie("some-cookie", "to avoid default"));
 
-        QCRestClient qcc = new QCRestClient("http://127.0.0.1:1080", "abc", "def");
+        QCRestClient qcc = new QCRestClient("http://127.0.0.1:1082", "abc", "def");
 
         QcDefect d = new QcDefect();
         d.setProject("theProject");
@@ -113,7 +111,7 @@ public class BasicClientTest {
 
     @Test
     public void theClientCanUseAnEntityObjectToDeferAGenericTypeForAPut() {
-        mockServer = startClientAndServer(1080);
+        mockServer = startClientAndServer(1083);
         mockServer
                 .when(request("/qcbin/rest/domains/theDomain/projects/theProject/defects/1")
                         .withBody("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" +
@@ -136,7 +134,7 @@ public class BasicClientTest {
                         .withStatusCode(201)
                         .withCookie("some-cookie", "to avoid default"));
 
-        QCRestClient qcc = new QCRestClient("http://127.0.0.1:1080", "abc", "def");
+        QCRestClient qcc = new QCRestClient("http://127.0.0.1:1083", "abc", "def");
 
         QcDefect d = new QcDefect();
         d.setProject("theProject");

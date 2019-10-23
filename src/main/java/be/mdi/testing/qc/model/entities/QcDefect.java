@@ -27,8 +27,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class QcDefect extends QcEntity {
 
     public QcDefect() {
-        setQcType(QcType.DEFECT);
-        setType("defect");
+        super(QcType.DEFECT);
+        //setQcType(QcType.DEFECT);
     }
 
     public String getField(QcDefectField field) {

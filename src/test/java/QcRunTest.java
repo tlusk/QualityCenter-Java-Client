@@ -16,56 +16,51 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-//Testing
+import be.mdi.testing.qc.client.QCRestClient;
 import be.mdi.testing.qc.model.QcType;
-import be.mdi.testing.qc.model.entities.QcDefect;
-import org.junit.jupiter.api.Test;
+import be.mdi.testing.qc.model.entities.QcRun;
+import be.mdi.testing.qc.model.fields.QcRunField;
 import org.junit.jupiter.api.Assertions;
-
+import org.junit.jupiter.api.Test;
 import org.mockserver.integration.ClientAndServer;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import java.io.StringWriter;
+
 import static org.mockserver.integration.ClientAndServer.startClientAndServer;
 import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
 
-//Project
-import be.mdi.testing.qc.client.QCRestClient;
-import be.mdi.testing.qc.model.fields.QcDefectField;
-
-//Support
-import java.io.StringWriter;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-
-public class DefectTest {
-
+public class QcRunTest {
     private ClientAndServer mockServer;
 
     @Test
     public void theModelGeneratesAValidXmlTest() throws JAXBException {
 
-        QcDefect testDefect = new QcDefect();
+        QcRun qcRun = new QcRun();
 
-        testDefect.setField(QcDefectField.DESCRIPTION, "the description");
-        testDefect.setField(QcDefectField.CLOSING_DATE, "2019-07-20");
+        qcRun.setField(QcRunField.RUN_NAME, "the name");
+        qcRun.setField(QcRunField.EXECUTION_DATE, "2019-07-20");
 
         StringWriter sw = new StringWriter();
 
-        JAXBContext contextObj = JAXBContext.newInstance(QcDefect.class);
+        JAXBContext contextObj = JAXBContext.newInstance(QcRun.class);
         Marshaller marshallerObj = contextObj.createMarshaller();
         marshallerObj.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
         marshallerObj.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
 
-        marshallerObj.marshal(testDefect, sw);
+        marshallerObj.marshal(qcRun, sw);
 
         Assertions.assertEquals(sw.toString(), "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
-                "<Entity Type=\"defect\">\n" +
+                "<Entity Type=\"run\">\n" +
                 "    <Fields>\n" +
-                "        <Field Name=\"description\">\n" +
-                "            <Value>the description</Value>\n" +
-                "        </Field>\n" +
-                "        <Field Name=\"closing-date\">\n" +
+                "        <Field Name=\"execution-date\">\n" +
                 "            <Value>2019-07-20</Value>\n" +
+                "        </Field>\n" +
+                "        <Field Name=\"run-name\">\n" +
+                "            <Value>the name</Value>\n" +
                 "        </Field>\n" +
                 "    </Fields>\n" +
                 "</Entity>\n");
@@ -75,51 +70,51 @@ public class DefectTest {
 
     @Test
     public void getTheUrlForTheDefectObjectWithoutIdDefined() {
-        QcDefect d = new QcDefect();
+        QcRun d = new QcRun();
         d.setDomain("theDomain");
         d.setProject("theProject");
-
-        assert d.getUrl().equals("rest/domains/theDomain/projects/theProject/defects");
+        System.out.println(d.getUrl().equals("rest/domains/theDomain/projects/theProject/runs"));
+        assert d.getUrl().equals("rest/domains/theDomain/projects/theProject/runs");
     }
 
     @Test
     public void getTheUrlForTheDefectObjectWithTheIdDefined() {
-        QcDefect d = new QcDefect();
+        QcRun d = new QcRun();
         d.setDomain("theDomain");
         d.setProject("theProject");
-        d.setField(QcDefectField.BUG_ID, "1");
+        d.setField(QcRunField.ID, "1");
 
-        assert d.getUrl().equals("rest/domains/theDomain/projects/theProject/defects/1");
+        assert d.getUrl().equals("rest/domains/theDomain/projects/theProject/runs/1");
     }
 
     @Test
     public void theMethodCanGenerateAnObjectFromAValidXml() {
         mockServer = startClientAndServer(1080);
         mockServer
-                .when(request("/qcbin/rest/domains/theDomain/projects/theProject/defects/1"))
+                .when(request("/qcbin/rest/domains/theDomain/projects/theProject/runs/1"))
                 .respond(response()
                         .withHeader("Content-Type", "application/xml")
                         .withCookie("some-cookie", "to avoid default")
                         .withBody("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
-                                "<Entity Type=\"defect\">\n" +
+                                "<Entity Type=\"run\">\n" +
                                 "    <Fields>\n" +
-                                "        <Field Name=\"description\">\n" +
+                                "        <Field Name=\"run-name\">\n" +
                                 "            <Value>the description</Value>\n" +
                                 "        </Field>\n" +
-                                "        <Field Name=\"closing-date\">\n" +
+                                "        <Field Name=\"execution-date\">\n" +
                                 "            <Value>2019-07-20</Value>\n" +
                                 "        </Field>\n" +
                                 "    </Fields>\n" +
                                 "</Entity>"));
 
         QCRestClient qcc = new QCRestClient("http://127.0.0.1:1080", "abc", "def");
-        QcDefect defect = qcc.getDefect("theDomain", "theProject", 1);
+        QcRun qcRun = qcc.getRun("theDomain", "theProject", 1);
 
-        System.out.println(defect.getField(QcDefectField.DESCRIPTION));
-        assert defect.getField(QcDefectField.DESCRIPTION).equals("the description");
-        assert defect.getProject().equals("theProject");
-        assert defect.getDomain().equals("theDomain");
-        assert defect.getQcType().equals(QcType.DEFECT);
+        System.out.println(qcRun.getField(QcRunField.RUN_NAME));
+        assert qcRun.getField(QcRunField.RUN_NAME).equals("the description");
+        assert qcRun.getProject().equals("theProject");
+        assert qcRun.getDomain().equals("theDomain");
+        Assertions.assertEquals(QcType.RUN, qcRun.getQcType());
 
         mockServer.stop();
     }

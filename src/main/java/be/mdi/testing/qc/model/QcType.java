@@ -18,41 +18,39 @@
  */
 package be.mdi.testing.qc.model;
 
+import be.mdi.testing.qc.model.entities.QcDefect;
+import be.mdi.testing.qc.model.entities.QcRun;
+import be.mdi.testing.qc.model.entities.QcRunStep;
+import be.mdi.testing.qc.model.fields.QcRunStepField;
+
 public enum QcType {
 
-    BUG("defect", "BUG", "defects", null),
-    DEFECT("defect", "BUG", "defects", null),
-    RUN("run", "RUN", "runs", null),
-    RUN_STEP("run-step", "STEP", "run-steps", QcType.RUN);
+    BUG("defect", "BUG", "defects", null, null, QcDefect.class),
+    DEFECT("defect", "BUG", "defects", null, null, QcDefect.class),
+    RUN("run", "RUN", "runs", null, null, QcRun.class),
+    RUN_STEP("run-step", "STEP", "run-steps", QcRunStepField.PARENT_ID.getName(), RUN, QcRunStep.class);
 
     private String smallCapType;
     private String dbType;
     private String restUrlType;
-    private QcType typeParent;
+    private String parentIdentifier;
+    private QcType parentType;
+    private Class retType;
 
-    QcType(String smallCapType, String dbType, String restUrlType, QcType typeParent) {
+    QcType(String smallCapType, String dbType, String restUrlType, String parentIdentifier, QcType parentType, Class retType) {
         this.smallCapType = smallCapType;
         this.dbType = dbType;
         this.restUrlType = restUrlType;
-        this.typeParent = typeParent;
+        this.parentIdentifier = parentIdentifier;
+        this.parentType = parentType;
+        this.retType = retType;
     }
 
     public String getSmallCapType() { return smallCapType; }
     public String getDbType() { return dbType; }
     public String getRestUrlType() { return restUrlType; }
-    public boolean hasTypeParent() { if(typeParent == null){return false;}else{return true;} }
-    public QcType getTypeParent() { return typeParent; }
-
-    public String getEntityUrl() {
-        String url = "";
-        if(this.hasTypeParent()) {
-            url += "/";
-            url += this.getTypeParent().getRestUrlType();
-        }
-        url += "/";
-        url += this.getRestUrlType();
-
-        return url;
-    }
-
+    public boolean hasTypeParent() { return (parentType != null); }
+    public String getParentIdentifier() { return parentIdentifier; }
+    public QcType getParentType() { return parentType; }
+    public Class getRetType() { return retType; }
 }

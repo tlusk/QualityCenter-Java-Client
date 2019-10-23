@@ -18,23 +18,7 @@
  */
 package be.mdi.testing.qc.model.entities;
 
-import be.mdi.testing.qc.model.QcType;
-import be.mdi.testing.qc.model.fields.QcRunField;
-
-import javax.xml.bind.annotation.XmlRootElement;
-
-@XmlRootElement(name = "Entity")
-public class QcRun extends QcEntity {
-
-    public QcRun() {
-        super(QcType.RUN);
-    }
-
-    public String getField(QcRunField field) {
-        return fields.get(field.getName());
-    }
-
-    public void setField(QcRunField field, String value) {
-        fields.put(field.getName(), value);
-    }
+public interface QcEntitiesInterface<T extends QcEntity> {
+    T get(int index);
+    void add(T e);
 }

@@ -16,25 +16,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package be.mdi.testing.qc.model.entities;
-
+import be.mdi.testing.qc.client.QCRestClient;
 import be.mdi.testing.qc.model.QcType;
-import be.mdi.testing.qc.model.fields.QcRunField;
+import be.mdi.testing.qc.model.entities.QcDefect;
+import be.mdi.testing.qc.model.entities.QcDefects;
+import be.mdi.testing.qc.model.fields.QcDefectField;
+import org.junit.jupiter.api.Test;
+import org.mockserver.integration.ClientAndServer;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import static org.mockserver.integration.ClientAndServer.startClientAndServer;
+import static org.mockserver.model.HttpRequest.request;
+import static org.mockserver.model.HttpResponse.response;
 
-@XmlRootElement(name = "Entity")
-public class QcRun extends QcEntity {
+public class QcDefectsTest {
 
-    public QcRun() {
-        super(QcType.RUN);
-    }
+    @Test
+    public void testTheTypeOfThecompositObject() {
 
-    public String getField(QcRunField field) {
-        return fields.get(field.getName());
-    }
+        QcDefects defs = new QcDefects();
 
-    public void setField(QcRunField field, String value) {
-        fields.put(field.getName(), value);
     }
 }

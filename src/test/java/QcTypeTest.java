@@ -18,6 +18,7 @@
  */
 
 import be.mdi.testing.qc.model.QcType;
+import be.mdi.testing.qc.model.entities.QcDefect;
 import org.junit.jupiter.api.Test;
 
 public class QcTypeTest {
@@ -28,19 +29,7 @@ public class QcTypeTest {
         assert t.getDbType().equals("BUG");
         assert t.getSmallCapType().equals("defect");
         assert t.getRestUrlType().equals("defects");
-        assert t.getTypeParent() == null;
-    }
-
-    @Test
-    public void theQcTypeObjectReturnsALinkForItemWithoutParent() {
-        QcType t = QcType.DEFECT;
-        System.out.println(t.getEntityUrl());
-        assert t.getEntityUrl().equals("/defects");
-    }
-
-    @Test
-    void theQcTypeObjectReturnsALinkForItemWithParent() {
-        QcType t = QcType.RUN_STEP;
-        assert t.getEntityUrl().equals("/runs/run-steps");
+        assert t.getParentIdentifier() == null;
+        assert t.getRetType() == QcDefect.class;
     }
 }

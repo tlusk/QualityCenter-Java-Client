@@ -33,9 +33,9 @@ import java.util.Map;
 
 public class QcEntity {
 
-    protected String domain;
-    protected String project;
-    protected QcType qcType;
+    private String domain;
+    private String project;
+    private QcType qcType;
 
     protected String type;
 
@@ -45,8 +45,13 @@ public class QcEntity {
         fields = new HashMap<String, String>();
     }
 
-    @XmlAttribute(name = "Type")
-    public String getType() { return type; }
+    public QcEntity(QcType qcType) {
+        this.qcType = qcType;
+        this.type = qcType.getSmallCapType();
+
+        fields = new HashMap<String, String>();
+    }
+
     @XmlTransient
     public String getDomain() { return domain; }
     @XmlTransient
@@ -54,18 +59,8 @@ public class QcEntity {
     @XmlTransient
     public QcType getQcType() { return qcType; }
 
-    public String getUrl() {
-        String url =  "rest/domains/" + domain + "/projects/" + project + qcType.getEntityUrl();
-        if(getFields().get("id") != null) {
-            url += "/" + getFields().get("id");
-        }
-        return url;
-    }
-
-    public void setType(String type) { this.type = type; }
-    public void setQcType(QcType qcType) { this.qcType = qcType; }
-    public void setDomain(String domain) { this.domain = domain; }
-    public void setProject(String project) { this.project = project; }
+    @XmlAttribute(name = "Type")
+    public String getType() { return type; }
 
     @XmlElement(name = "Fields")
     @XmlJavaTypeAdapter(MapFieldsAdapter.class)
@@ -73,8 +68,32 @@ public class QcEntity {
         return fields;
     }
 
+    public void setType(String type) { this.type = type; }
+    public void setQcType(QcType qcType) {
+        this.qcType = qcType;
+        this.type = qcType.getSmallCapType();
+    }
+    public void setDomain(String domain) { this.domain = domain; }
+    public void setProject(String project) { this.project = project; }
     protected void setFields(Map<String,String> fields) {
         this.fields = fields;
+    }
+
+    public String getUrl() {
+        String url =  "rest/domains/" + domain + "/projects/" + project + "/";
+
+        if(qcType.hasTypeParent()) {
+            url += qcType.getParentType().getRestUrlType();
+            url += "/" + getFields().get(qcType.getParentIdentifier()) + "/";
+        }
+
+        url += qcType.getRestUrlType();
+
+        if(getFields().containsKey("id") && getFields().get("id") != null) {
+            url += "/" + getFields().get("id");
+        }
+
+        return url;
     }
 }
 
