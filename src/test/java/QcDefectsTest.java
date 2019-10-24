@@ -34,6 +34,10 @@ public class QcDefectsTest {
     public void testTheTypeOfThecompositObject() {
 
         QcDefects defs = new QcDefects();
+        QcDefect def = new QcDefect();
+        def.setField(QcDefectField.DESCRIPTION, "the description");
+
+        defs.add(def);
 
     }
 }

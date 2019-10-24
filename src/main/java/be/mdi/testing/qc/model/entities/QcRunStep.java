@@ -27,15 +27,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class QcRunStep extends QcEntity {
 
     public QcRunStep() {
-        super();
-        setQcType(QcType.RUN_STEP);
+        super(QcType.RUN_STEP);
     }
 
     public String getField(QcRunStepField field) {
         return fields.get(field.getName());
     }
 
-    public void setField(QcRunStepField field, String value) {
+    public QcRunStep setField(QcRunStepField field, String value) {
         fields.put(field.getName(), value);
+        return this;
     }
 }

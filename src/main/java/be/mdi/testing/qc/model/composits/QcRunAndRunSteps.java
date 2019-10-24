@@ -16,26 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package be.mdi.testing.qc.model.entities;
+package be.mdi.testing.qc.model.composits;
 
-import be.mdi.testing.qc.model.QcType;
-import be.mdi.testing.qc.model.fields.QcRunField;
+public class QcRunAndRunSteps {
 
-import javax.xml.bind.annotation.XmlRootElement;
+    
 
-@XmlRootElement(name = "Entity")
-public class QcRun extends QcEntity {
-
-    public QcRun() {
-        super(QcType.RUN);
-    }
-
-    public String getField(QcRunField field) {
-        return fields.get(field.getName());
-    }
-
-    public QcRun setField(QcRunField field, String value) {
-        fields.put(field.getName(), value);
-        return this;
-    }
 }

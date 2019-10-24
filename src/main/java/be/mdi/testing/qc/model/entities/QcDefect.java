@@ -28,14 +28,14 @@ public class QcDefect extends QcEntity {
 
     public QcDefect() {
         super(QcType.DEFECT);
-        //setQcType(QcType.DEFECT);
     }
 
     public String getField(QcDefectField field) {
         return fields.get(field.getName());
     }
 
-    public void setField(QcDefectField field, String value) {
+    public QcDefect setField(QcDefectField field, String value) {
         fields.put(field.getName(), value);
+        return this;
     }
 }

@@ -38,9 +38,6 @@ public class QcEntities {
     public String getDomain() { return domain; }
     public String getProject() { return project; }
 
-    private void setTotalresults(int totalResults) {
-        this.totalresults = totalResults;
-    }
     public void setDomain(String domain) { this.domain = domain; }
     public void setProject(String project) {this.project = project; }
 }
