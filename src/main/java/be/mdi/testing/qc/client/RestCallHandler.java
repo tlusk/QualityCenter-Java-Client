@@ -55,6 +55,12 @@ class RestCallHandler {
         return invocationBuilder.post(Entity.entity(qcEntity, MediaType.APPLICATION_XML_TYPE)).readEntity(retType);
     }
 
+    Integer postRestData(QcEntities qcEntity, String restUrl) {
+        Invocation.Builder invocationBuilder = buildRestRequest(restUrl);
+        Response response = invocationBuilder.post(Entity.entity(qcEntity, MediaType.APPLICATION_XML_TYPE));
+        return response.getStatus();
+    }
+
     <T> T postRestData(Class<T> retType, QcEntities qcEntities, String restUrl) {
         Invocation.Builder invocationBuilder = buildRestRequest(restUrl);
         return invocationBuilder.post(Entity.entity(qcEntities, MediaType.APPLICATION_XML_TYPE)).readEntity(retType);

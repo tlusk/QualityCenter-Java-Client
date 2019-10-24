@@ -41,10 +41,6 @@ public class QcEntity {
 
     protected Map<String,String> fields;
 
-    public QcEntity() {
-        fields = new HashMap<String, String>();
-    }
-
     public QcEntity(QcType qcType) {
         this.qcType = qcType;
         this.type = qcType.getSmallCapType();
@@ -69,10 +65,6 @@ public class QcEntity {
     }
 
     public void setType(String type) { this.type = type; }
-    public void setQcType(QcType qcType) {
-        this.qcType = qcType;
-        this.type = qcType.getSmallCapType();
-    }
     public void setDomain(String domain) { this.domain = domain; }
     public void setProject(String project) { this.project = project; }
     protected void setFields(Map<String,String> fields) {

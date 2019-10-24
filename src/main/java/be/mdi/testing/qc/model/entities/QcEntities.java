@@ -26,7 +26,6 @@ import javax.xml.bind.annotation.XmlTransient;
 
 public class QcEntities {
 
-    @XmlAttribute(name = "TotalResults")
     private int totalresults;
 
     @XmlTransient
@@ -35,10 +34,17 @@ public class QcEntities {
     private String domain;
     @XmlTransient
     private QcType qcType;
+    @XmlTransient
+    private String parentIdentifier;
 
     public QcEntities(QcType qcType) {
         this.qcType = qcType;
     }
+
+    //If it is on the field level it fails with "two properties of the same name"
+    //https://stackoverflow.com/questions/6768544/jaxb-class-has-two-properties-of-the-same-name
+    @XmlAttribute(name = "TotalResults")
+    public void setTotalresults(int totalresults) {this.totalresults = totalresults;}
 
     public int getTotalresults() {
         return totalresults;
@@ -46,11 +52,20 @@ public class QcEntities {
     public String getDomain() { return domain; }
     public String getProject() { return project; }
 
+    @XmlTransient
     public void setDomain(String domain) { this.domain = domain; }
+    @XmlTransient
     public void setProject(String project) {this.project = project; }
+    @XmlTransient
+    public void setParentIdentifier(String parentIdentifier) {this.parentIdentifier = parentIdentifier; }
 
     public String getUrl() {
         String url =  "rest/domains/" + domain + "/projects/" + project + "/";
+
+        if(qcType.hasTypeParent()) {
+            url += qcType.getParentType().getRestUrlType();
+            url += "/" + parentIdentifier + "/";
+        }
 
         url += qcType.getRestUrlType();
 

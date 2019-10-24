@@ -53,8 +53,9 @@ public class QcRunSteps extends QcEntities implements QcEntitiesInterface<QcRunS
      * @param id
      */
     public void setRunId(String id) {
+        setParentIdentifier(id);
         for(QcRunStep r : entities) {
-            r.setField(QcRunStepField.ID, id);
+            r.setField(QcRunStepField.RUN_ID, id);
         }
     }
 }

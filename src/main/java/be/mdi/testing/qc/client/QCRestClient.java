@@ -93,6 +93,11 @@ public class QCRestClient {
         return callHandler.postRestData(retType, entity, entity.getUrl());
     }
 
+    public Integer postEntities(QcEntities entity) {
+        return
+                callHandler.postRestData(entity, entity.getUrl());
+    }
+
     public <T> T postEntities(Class<T> retType, QcEntities qcEntities) {
         return callHandler.postRestData(retType, qcEntities, qcEntities.getUrl());
     }

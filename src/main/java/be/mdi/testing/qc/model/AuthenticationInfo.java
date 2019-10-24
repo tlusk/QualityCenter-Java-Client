@@ -28,8 +28,4 @@ public class AuthenticationInfo {
     private String username;
 
     public AuthenticationInfo() {}
-
-    public AuthenticationInfo(String username) {
-        this.username = username;
-    }
 }

@@ -31,6 +31,5 @@ public class QcDefectsTest {
         def.setField(QcDefectField.DESCRIPTION, "the description");
 
         defs.add(def);
-
     }
 }
