@@ -18,29 +18,56 @@
  */
 package be.mdi.testing.qc.client;
 
-import be.mdi.testing.qc.model.QcStatus;
 import be.mdi.testing.qc.model.QcType;
 import be.mdi.testing.qc.model.entities.*;
 import be.mdi.testing.qc.model.Domains;
 import be.mdi.testing.qc.model.Projects;
 
+/**
+ * This class implemetns the {@Link RestCallHandler.Class} class.
+ * The methods in this class aim to be readable.
+ * The implementation may get verbose and repetitive.
+ * A degree of verbosity and repetitiveness is tolerated to be able to offer a readable interface.
+ */
 public class QCRestClient {
 
     private RestCallHandler callHandler;
 
+    /**
+     * QCRestClient core instance.
+     * To instantiate - Call the constructor.
+     * After creating the object, you must log in by calling the login() method on this object.
+     * To log out, the logout() method may be used. If not logging out, then the session may be active until expiration.
+     * This is to be avoided.
+     * @param host - String, host name - only the server, not the /qcbin/rest part!
+     * @param username - Username in string format
+     * @param password - password in string format (TODO not safe - check implementation)
+     */
     public QCRestClient(String host, String username, String password) {
         callHandler = new RestCallHandler(host, username, password);
     }
 
     // Overhead & General items like logging in
 
+    /**
+     * Log in with the host, username and password provided in the constructor on creation of the object.
+     * @return
+     */
     public QCRestClient login() {
         callHandler.login();
         return this;
     }
 
+    /**
+     * Log out of the session.
+     * Advised to do so to keep the sessions clean.
+     */
     public void logout() { callHandler.logout(); }
 
+    /**
+     * Check if the client is logged in.
+     * @return
+     */
     public boolean isLoggedIn() { return callHandler.isLoggedIn(); }
 
     // Generic items
@@ -60,6 +87,14 @@ public class QCRestClient {
     public Integer postEntity(QcEntity entity) {
         return
         callHandler.postRestData(entity, entity.getUrl());
+    }
+
+    public <T> T postEntity(Class<T> retType, QcEntity entity) {
+        return callHandler.postRestData(retType, entity, entity.getUrl());
+    }
+
+    public <T> T postEntities(Class<T> retType, QcEntities qcEntities) {
+        return callHandler.postRestData(retType, qcEntities, qcEntities.getUrl());
     }
 
     public Integer putEntity(QcEntity entity) {
@@ -138,6 +173,15 @@ public class QCRestClient {
         );
     }
 
+    public QcRuns getRuns(String domain, String project) {
+        return getEntities(
+                QcRuns.class,
+                QcType.RUN,
+                domain,
+                project
+        );
+    }
+
     public QcRunStep getRunStep(String domain, String project, int runId, int runStepId) {
         return getEntity(
                 QcRunStep.class,
@@ -147,22 +191,5 @@ public class QCRestClient {
                 runStepId,
                 runId
         );
-    }
-
-
-
-    /* Create new run with result for specific test instance
-    * in first instance --> assume that if multiple are returned, must take the first one.
-    * Just to be robust at the start - we must manage this more elegantly.
-    * Note that to create a run and set the status you need to:
-    *    1. Create a run with status "Not Completed" -- Yes, this is necessary
-    *    2. Update the run with the correct status.
-    * Reference: https://lobsterautomation.wordpress.com/2017/01/18/hp-alm-rest-api/
-    * The first approach is to update based on the combination of a specific Test instance id based on:
-    *     - the test set id
-    *     - the test config id
-    * A later approach may include searching for a configuration in a test set linked to a specific cycle*/
-    public void createRunForResult(String domain, String project, QcRun qcRun, QcStatus status) {
-
     }
 }

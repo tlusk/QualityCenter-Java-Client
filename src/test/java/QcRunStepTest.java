@@ -1,22 +1,18 @@
 import be.mdi.testing.qc.client.QCRestClient;
 import be.mdi.testing.qc.model.entities.QcRunStep;
-import be.mdi.testing.qc.model.fields.QcRunField;
 import be.mdi.testing.qc.model.fields.QcRunStepField;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockserver.integration.ClientAndServer;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import java.io.StringWriter;
 
-import static org.mockserver.integration.ClientAndServer.startClientAndServer;
 import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
 
-public class QcRunStepTest {
-    private ClientAndServer mockServer;
+public class QcRunStepTest extends BaseMockTest {
 
     @Test
     public void theModelGeneratesAValidXmlTest() throws JAXBException {
@@ -70,7 +66,6 @@ public class QcRunStepTest {
 
     @Test
     public void theMethodCanGenerateAnObjectFromAValidXml() {
-        mockServer = startClientAndServer(1080);
         mockServer
                 .when(request("/qcbin/rest/domains/theDomain/projects/theProject/runs/1/run-steps/1"))
                 .respond(response()
@@ -91,12 +86,8 @@ public class QcRunStepTest {
         QCRestClient qcc = new QCRestClient("http://127.0.0.1:1080", "abc", "def");
         QcRunStep qcRunStep = qcc.getRunStep("theDomain", "theProject", 1, 1);
 
-        System.out.println(qcRunStep.getField(QcRunStepField.DESCRIPTION));
         assert qcRunStep.getField(QcRunStepField.DESCRIPTION).equals("the description");
         assert qcRunStep.getProject().equals("theProject");
         assert qcRunStep.getDomain().equals("theDomain");
-
-        mockServer.stop();
     }
-
 }

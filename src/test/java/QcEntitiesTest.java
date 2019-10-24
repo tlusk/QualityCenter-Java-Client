@@ -22,7 +22,6 @@ import be.mdi.testing.qc.model.entities.QcDefects;
 import be.mdi.testing.qc.model.fields.QcDefectField;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockserver.integration.ClientAndServer;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -30,11 +29,10 @@ import javax.xml.bind.Unmarshaller;
 
 import java.io.StringReader;
 
-import static org.mockserver.integration.ClientAndServer.startClientAndServer;
 import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
 
-public class QcEntitiesTest {
+public class QcEntitiesTest extends BaseMockTest {
 
     @Test
     public void theReturnTypeIsCorrect() {
@@ -329,7 +327,6 @@ public class QcEntitiesTest {
 
     @Test
     public void theObjectIsReturnedOkFromTheService() {
-        ClientAndServer mockServer = startClientAndServer(1080);
         mockServer
                 .when(request("/qcbin/rest/domains/theDomain/projects/theProject/defects"))
                 .respond(response()
@@ -605,9 +602,5 @@ public class QcEntitiesTest {
                 "Problem observed with temp lt 4 and humidity gt 60.",
                 defects.get(1).getField(QcDefectField.DESCRIPTION));
         Assertions.assertEquals(2, defects.getTotalresults());
-
-        mockServer.stop();
     }
-
-
 }

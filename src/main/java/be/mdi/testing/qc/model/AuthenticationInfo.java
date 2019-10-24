@@ -16,34 +16,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package be.mdi.testing.qc.model.entities;
-
-import be.mdi.testing.qc.model.QcType;
+package be.mdi.testing.qc.model;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.ArrayList;
-import java.util.List;
 
-@XmlRootElement(name = "Entities")
-public class QcRuns extends QcEntities implements QcEntitiesInterface<QcRun> {
+@XmlRootElement(name = "AuthenticationInfo")
+public class AuthenticationInfo {
 
-    @XmlElement(name = "Entity")
-    protected List<QcRun> entities;
+    @XmlElement(name = "Username")
+    private String username;
 
-    public QcRuns() {
-        super(QcType.RUN);
-        entities = new ArrayList<QcRun>();
-    }
+    public AuthenticationInfo() {}
 
-    public QcRun get(int index) {
-        QcRun r = entities.get(index);
-        r.setDomain(getDomain());
-        r.setProject(getProject());
-        return r;
-    }
-
-    public void add(QcRun e) {
-        entities.add(e);
+    public AuthenticationInfo(String username) {
+        this.username = username;
     }
 }

@@ -33,8 +33,7 @@ import static org.mockserver.integration.ClientAndServer.startClientAndServer;
 import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
 
-public class QcRunTest {
-    private ClientAndServer mockServer;
+public class QcRunTest extends BaseMockTest {
 
     @Test
     public void theModelGeneratesAValidXmlTest() throws JAXBException {
@@ -64,8 +63,6 @@ public class QcRunTest {
                 "        </Field>\n" +
                 "    </Fields>\n" +
                 "</Entity>\n");
-
-        System.out.println(sw.toString());
     }
 
     @Test
@@ -73,7 +70,6 @@ public class QcRunTest {
         QcRun d = new QcRun();
         d.setDomain("theDomain");
         d.setProject("theProject");
-        System.out.println(d.getUrl().equals("rest/domains/theDomain/projects/theProject/runs"));
         assert d.getUrl().equals("rest/domains/theDomain/projects/theProject/runs");
     }
 
@@ -89,7 +85,6 @@ public class QcRunTest {
 
     @Test
     public void theMethodCanGenerateAnObjectFromAValidXml() {
-        mockServer = startClientAndServer(1080);
         mockServer
                 .when(request("/qcbin/rest/domains/theDomain/projects/theProject/runs/1"))
                 .respond(response()
@@ -115,7 +110,5 @@ public class QcRunTest {
         assert qcRun.getProject().equals("theProject");
         assert qcRun.getDomain().equals("theDomain");
         Assertions.assertEquals(QcType.RUN, qcRun.getQcType());
-
-        mockServer.stop();
     }
 }

@@ -21,9 +21,6 @@ import be.mdi.testing.qc.model.QcType;
 import be.mdi.testing.qc.model.entities.QcDefect;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
-
-import org.mockserver.integration.ClientAndServer;
-import static org.mockserver.integration.ClientAndServer.startClientAndServer;
 import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
 
@@ -37,9 +34,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
-public class DefectTest {
-
-    private ClientAndServer mockServer;
+public class DefectTest  extends BaseMockTest {
 
     @Test
     public void theModelGeneratesAValidXmlTest() throws JAXBException {
@@ -69,8 +64,6 @@ public class DefectTest {
                 "        </Field>\n" +
                 "    </Fields>\n" +
                 "</Entity>\n");
-
-        System.out.println(sw.toString());
     }
 
     @Test
@@ -94,7 +87,6 @@ public class DefectTest {
 
     @Test
     public void theMethodCanGenerateAnObjectFromAValidXml() {
-        mockServer = startClientAndServer(1080);
         mockServer
                 .when(request("/qcbin/rest/domains/theDomain/projects/theProject/defects/1"))
                 .respond(response()
@@ -120,7 +112,5 @@ public class DefectTest {
         assert defect.getProject().equals("theProject");
         assert defect.getDomain().equals("theDomain");
         assert defect.getQcType().equals(QcType.DEFECT);
-
-        mockServer.stop();
     }
 }

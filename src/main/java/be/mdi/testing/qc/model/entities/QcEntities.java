@@ -18,6 +18,8 @@
  */
 package be.mdi.testing.qc.model.entities;
 
+import be.mdi.testing.qc.model.QcType;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -31,6 +33,12 @@ public class QcEntities {
     private String project;
     @XmlTransient
     private String domain;
+    @XmlTransient
+    private QcType qcType;
+
+    public QcEntities(QcType qcType) {
+        this.qcType = qcType;
+    }
 
     public int getTotalresults() {
         return totalresults;
@@ -40,4 +48,12 @@ public class QcEntities {
 
     public void setDomain(String domain) { this.domain = domain; }
     public void setProject(String project) {this.project = project; }
+
+    public String getUrl() {
+        String url =  "rest/domains/" + domain + "/projects/" + project + "/";
+
+        url += qcType.getRestUrlType();
+
+        return url;
+    }
 }

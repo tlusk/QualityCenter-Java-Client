@@ -18,9 +18,6 @@
  */
 //Testing
 import org.junit.jupiter.api.Test;
-
-import org.mockserver.integration.ClientAndServer;
-import static org.mockserver.integration.ClientAndServer.startClientAndServer;
 import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
 
@@ -32,13 +29,10 @@ import be.mdi.testing.qc.model.Project;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProjectsTest {
-
-    private ClientAndServer mockServer;
+public class ProjectsTest extends BaseMockTest {
 
     @Test
     public void theMethodCanGenerateAnObjectFromAValidXmlForOneProject() {
-        mockServer = startClientAndServer(1080);
         mockServer
                 .when(request("/qcbin/rest/domains/theDomain/projects"))
                 .respond(response()
@@ -55,8 +49,6 @@ public class ProjectsTest {
 
         System.out.println(project.getName());
         assert project.getName().equals("PROJECT_NAME");
-
-        mockServer.stop();
     }
 
     @Test
@@ -66,7 +58,6 @@ public class ProjectsTest {
         listToVerifyAgainst.add("PROJECT_NAME_2");
         listToVerifyAgainst.add("PROJECT_NAME_3");
 
-        mockServer = startClientAndServer(1080);
         mockServer
                 .when(request("/qcbin/rest/domains/theDomain/projects"))
                 .respond(response()
@@ -83,7 +74,5 @@ public class ProjectsTest {
 
         System.out.println(projects.getNames().toString());
         assert projects.getNames().equals(listToVerifyAgainst);
-
-        mockServer.stop();
     }
 }

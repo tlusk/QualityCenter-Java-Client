@@ -18,8 +18,45 @@
  */
 package be.mdi.testing.qc.model.composits;
 
-public class QcRunAndRunSteps {
+import be.mdi.testing.qc.client.QCRestClient;
+import be.mdi.testing.qc.model.entities.QcRun;
+import be.mdi.testing.qc.model.entities.QcRunStep;
+import be.mdi.testing.qc.model.entities.QcRunSteps;
+import be.mdi.testing.qc.model.fields.QcRunField;
 
-    
+/**
+ * This class is a composit object.
+ * It is a QcRun object that contains QcRunSteps.
+ * This to facilitate fluent usage of the API.
+ *
+ */
+public class QcRunAndRunSteps implements QcCommitable {
 
+    private QcRun qcRun;
+    private QcRunSteps qcRunSteps;
+
+    public QcRunAndRunSteps(QcRun qcRun) {
+        this.qcRun = qcRun;
+        this.qcRunSteps = new QcRunSteps();
+    }
+
+    public QcRunAndRunSteps addStep(QcRunStep qcRunStep) {
+        qcRunSteps.add(qcRunStep);
+        return this;
+    }
+
+    //TODO get the username and password out of the method and into another vehicle like properties
+    public void commit(String host, String username, String password) {
+        QCRestClient qcc = new QCRestClient(host, username, password);
+        qcc.login();
+        qcRun = qcc.postEntity(QcRun.class, qcRun);
+        String id = qcRun.getField(QcRunField.ID);
+        qcRunSteps.setRunId(id);
+        qcRunSteps = qcc.postEntities(QcRunSteps.class, qcRunSteps);
+        qcc.logout();
+    }
+
+    public void update() {
+
+    }
 }

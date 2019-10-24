@@ -19,8 +19,6 @@
 //Testing
 import org.junit.jupiter.api.Test;
 
-import org.mockserver.integration.ClientAndServer;
-import static org.mockserver.integration.ClientAndServer.startClientAndServer;
 import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
 
@@ -32,13 +30,10 @@ import be.mdi.testing.qc.model.Domain;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DomainsTest {
-
-    private ClientAndServer mockServer;
+public class DomainsTest extends BaseMockTest {
 
     @Test
     public void theMethodCanGenerateAnObjectFromAValidXmlForOneDomain() {
-        mockServer = startClientAndServer(1080);
         mockServer
                 .when(request("/qcbin/rest/domains"))
                 .respond(response()
@@ -55,8 +50,6 @@ public class DomainsTest {
 
         System.out.println(domain.getName());
         assert domain.getName().equals("Domain_NAME");
-
-        mockServer.stop();
     }
 
     @Test
@@ -66,7 +59,6 @@ public class DomainsTest {
         listToVerifyAgainst.add("Domain_NAME_2");
         listToVerifyAgainst.add("Domain_NAME_3");
 
-        mockServer = startClientAndServer(1080);
         mockServer
                 .when(request("/qcbin/rest/domains"))
                 .respond(response()
@@ -83,8 +75,6 @@ public class DomainsTest {
 
         System.out.println(domains.getNames().toString());
         assert domains.getNames().equals(listToVerifyAgainst);
-
-        mockServer.stop();
     }
 
     @Test
@@ -94,7 +84,6 @@ public class DomainsTest {
         listToVerifyAgainst.add("Domain_NAME_2");
         listToVerifyAgainst.add("Domain_NAME_3");
 
-        mockServer = startClientAndServer(1080);
         mockServer
                 .when(request("/qcbin/rest/domains")
                         .withQueryStringParameter("include-projects-info", "y"))
@@ -117,7 +106,5 @@ public class DomainsTest {
         System.out.println(domains.getNames().toString());
         assert domains.getNames().equals(listToVerifyAgainst);
         assert domains.get(0).getProjects().get(0).getName().equals("The_projectName");
-
-        mockServer.stop();
     }
 }

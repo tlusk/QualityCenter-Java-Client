@@ -16,9 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package be.mdi.testing.qc.client;
 
+import be.mdi.testing.qc.model.entities.QcEntities;
 import be.mdi.testing.qc.model.entities.QcEntity;
 import org.glassfish.jersey.client.filter.HttpBasicAuthFilter;
 
@@ -32,13 +32,11 @@ class RestCallHandler {
     private final String username;
     private final String password;
     private String sessionKey;
-    private Boolean loggedIn;
 
     RestCallHandler(String host, String username, String password) {
         this.host = host;
         this.username = username;
         this.password = password;
-        this.loggedIn = false;
     }
 
     <T> T getRestData(Class<T> retType, String restUrl) {
@@ -52,10 +50,29 @@ class RestCallHandler {
         return response.getStatus();
     }
 
+    <T> T postRestData(Class<T> retType, QcEntity qcEntity, String restUrl) {
+        Invocation.Builder invocationBuilder = buildRestRequest(restUrl);
+        return invocationBuilder.post(Entity.entity(qcEntity, MediaType.APPLICATION_XML_TYPE)).readEntity(retType);
+    }
+
+    <T> T postRestData(Class<T> retType, QcEntities qcEntities, String restUrl) {
+        Invocation.Builder invocationBuilder = buildRestRequest(restUrl);
+        return invocationBuilder.post(Entity.entity(qcEntities, MediaType.APPLICATION_XML_TYPE)).readEntity(retType);
+    }
+
     Integer putRestData(QcEntity qcEntity, String restUrl) {
         Invocation.Builder invocationBuilder = buildRestRequest(restUrl);
         Response response = invocationBuilder.put(Entity.entity(qcEntity, MediaType.APPLICATION_XML));
         return response.getStatus();
+    }
+
+    <T> T putRestData(Class<T> retType, QcEntity qcEntity, String restUrl) {
+        Invocation.Builder invocationBuilder = buildRestRequest(restUrl);
+        return invocationBuilder
+                .post(
+                        Entity.entity(qcEntity, MediaType.APPLICATION_XML_TYPE)
+                )
+                .readEntity(retType);
     }
 
     void login() {
@@ -64,21 +81,28 @@ class RestCallHandler {
         WebTarget webTarget = client.target(host + "/qcbin/authentication-point/authenticate");
         Response response = webTarget.request(MediaType.TEXT_PLAIN_TYPE).get();
         sessionKey = response.getHeaderString("Set-Cookie").split("=")[1].split(" ")[0];
-        this.loggedIn = true;
     }
 
     void logout() {
         buildRestRequest("/qcbin/authentication-point/logout").get();
-        this.loggedIn = false;
     }
 
     boolean isLoggedIn() {
-        return loggedIn;
+        Client client = ClientBuilder.newClient();
+        WebTarget webTarget = client.target(host + "/qcbin/rest/is-authenticated");
+        Response response = webTarget.request(MediaType.TEXT_PLAIN_TYPE)
+                .header("Cookie", "LWSSO_COOKIE_KEY=" + sessionKey)
+                .get();
+        return response.getStatus() == 200 ? true : false;
     }
 
     private Invocation.Builder buildRestRequest(String restUrl) {
         Client client = ClientBuilder.newClient();
         WebTarget webTarget = client.target(host + "/qcbin/" + restUrl);
+
+        if(!isLoggedIn()) {
+            login();
+        }
 
         Invocation.Builder invocationBuilder = webTarget.request(MediaType.WILDCARD_TYPE);
         return invocationBuilder.header("Cookie", "LWSSO_COOKIE_KEY=" + sessionKey);

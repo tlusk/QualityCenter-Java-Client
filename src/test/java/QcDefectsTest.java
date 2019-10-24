@@ -16,17 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import be.mdi.testing.qc.client.QCRestClient;
-import be.mdi.testing.qc.model.QcType;
 import be.mdi.testing.qc.model.entities.QcDefect;
 import be.mdi.testing.qc.model.entities.QcDefects;
 import be.mdi.testing.qc.model.fields.QcDefectField;
 import org.junit.jupiter.api.Test;
-import org.mockserver.integration.ClientAndServer;
-
-import static org.mockserver.integration.ClientAndServer.startClientAndServer;
-import static org.mockserver.model.HttpRequest.request;
-import static org.mockserver.model.HttpResponse.response;
 
 public class QcDefectsTest {
 

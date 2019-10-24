@@ -1,5 +1,7 @@
 package be.mdi.testing.qc.model.entities;
 
+import be.mdi.testing.qc.model.QcType;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
@@ -12,6 +14,7 @@ public class QcDefects extends QcEntities implements QcEntitiesInterface<QcDefec
     protected List<QcDefect> entities;
 
     public QcDefects()  {
+        super(QcType.DEFECT);
         entities = new ArrayList<QcDefect>();
     }
 

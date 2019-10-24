@@ -18,6 +18,9 @@
  */
 package be.mdi.testing.qc.model.entities;
 
+import be.mdi.testing.qc.model.QcType;
+import be.mdi.testing.qc.model.fields.QcRunStepField;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
@@ -30,6 +33,7 @@ public class QcRunSteps extends QcEntities implements QcEntitiesInterface<QcRunS
     protected List<QcRunStep> entities;
 
     public QcRunSteps() {
+        super(QcType.RUN_STEP);
         entities = new ArrayList<QcRunStep>();
     }
 
@@ -42,5 +46,15 @@ public class QcRunSteps extends QcEntities implements QcEntitiesInterface<QcRunS
 
     public void add(QcRunStep e) {
         entities.add(e);
+    }
+
+    /**
+     * Set all the RunSteps' ID with the parent run ID.
+     * @param id
+     */
+    public void setRunId(String id) {
+        for(QcRunStep r : entities) {
+            r.setField(QcRunStepField.ID, id);
+        }
     }
 }

@@ -1,7 +1,6 @@
 package be.mdi.testing.qc.model.composits;
 
 public interface QcCommitable {
-    void commit();
+    void commit(String host, String username, String password);
     void update();
-    void get(int id);
 }
