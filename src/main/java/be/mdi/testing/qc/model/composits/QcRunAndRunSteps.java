@@ -45,6 +45,29 @@ public class QcRunAndRunSteps implements QcCommitable {
         return this;
     }
 
+    public QcRunAndRunSteps setRun(QcRun qcRun) {
+        this.qcRun = qcRun;
+        return this;
+    }
+
+    public QcRun getQcRun() {
+        return qcRun;
+    }
+
+    public QcRunAndRunSteps setQcRunSteps(QcRunSteps qcRunSteps) {
+        this.qcRunSteps = qcRunSteps;
+        return this;
+    }
+
+    public QcRunSteps getQcRunSteps() {
+        return qcRunSteps;
+    }
+
+    public QcRunAndRunSteps setRunField(QcRunField qcRunField, String value) {
+        qcRun.setField(qcRunField, value);
+        return this;
+    }
+
     public void commit() {
         qcRun = getQcClient().postEntity(QcRun.class, qcRun);
         String id = qcRun.getField(QcRunField.ID);

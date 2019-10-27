@@ -51,7 +51,7 @@ public class QCRestClient {
 
     /**
      * Log in with the host, username and password provided in the constructor on creation of the object.
-     * @return
+     * @return QCRestClient (fluent api)
      */
     public QCRestClient login() {
         callHandler.login();
@@ -66,7 +66,7 @@ public class QCRestClient {
 
     /**
      * Check if the client is logged in.
-     * @return
+     * @return boolean (logged in: true; not logged in: false - true when is-authenticated returns OK.
      */
     public boolean isLoggedIn() { return callHandler.isLoggedIn(); }
 
