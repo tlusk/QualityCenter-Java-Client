@@ -18,7 +18,7 @@
  */
 package be.mdi.testing.qc.model.composits;
 
-import be.mdi.testing.qc.client.QCRestClient;
+import static be.mdi.testing.qc.client.StaticQCRestClient.getQcClient;
 import be.mdi.testing.qc.model.entities.QcRun;
 import be.mdi.testing.qc.model.entities.QcRunStep;
 import be.mdi.testing.qc.model.entities.QcRunSteps;
@@ -45,15 +45,11 @@ public class QcRunAndRunSteps implements QcCommitable {
         return this;
     }
 
-    //TODO get the username and password out of the method and into another vehicle like properties
-    public void commit(String host, String username, String password) {
-        QCRestClient qcc = new QCRestClient(host, username, password);
-        qcc.login();
-        qcRun = qcc.postEntity(QcRun.class, qcRun);
+    public void commit() {
+        qcRun = getQcClient().postEntity(QcRun.class, qcRun);
         String id = qcRun.getField(QcRunField.ID);
         qcRunSteps.setRunId(id);
-        qcRunSteps = qcc.postEntities(QcRunSteps.class, qcRunSteps);
-        qcc.logout();
+        qcRunSteps = getQcClient().postEntities(QcRunSteps.class, qcRunSteps);
     }
 
     public void update() {

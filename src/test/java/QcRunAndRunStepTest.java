@@ -1,3 +1,5 @@
+import org.junit.jupiter.api.Test;
+
 /*
  * QC REST API client
  *
@@ -16,19 +18,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package be.mdi.testing.qc.exception;
+public class QcRunAndRunStepTest {
 
-public class QcTypeException extends Exception {
+    @Test
+    public void testThatWeCanCreateRunAndRunStepObject() {
 
-    public QcTypeException(String message) {
-        super(message);
     }
 
-    public QcTypeException(String message, Throwable throwable) {
-        super(message, throwable);
-    }
+    @Test
+    public void testThatWeCanUseTheCommitFunctionality() {
 
-    public QcTypeException(Throwable throwable) {
-        super(throwable);
     }
 }

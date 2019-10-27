@@ -39,8 +39,6 @@ public class BasicClientTest extends BaseMockTest {
         QCRestClient qcc = new QCRestClient("http://127.0.0.1:1080", "username", "password");
 
         Assertions.assertEquals(true, qcc.login().isLoggedIn());
-
-        mockServer.stop();
     }
 
     @Test
@@ -71,9 +69,6 @@ public class BasicClientTest extends BaseMockTest {
         qcc.logout();
 
         assert qcc.isLoggedIn() == false;
-
-
-        mockServer.stop();
     }
 
     @Test
@@ -106,8 +101,6 @@ public class BasicClientTest extends BaseMockTest {
         d.setField(QcDefectField.CLOSING_DATE, "2019-07-20");
 
         assert qcc.postEntity(d) == 201;
-
-        mockServer.stop();
     }
 
     @Test
@@ -144,7 +137,5 @@ public class BasicClientTest extends BaseMockTest {
         d.setField(QcDefectField.BUG_ID, "1");
 
         assert qcc.putEntity(d) == 201;
-
-        mockServer.stop();
     }
 }
